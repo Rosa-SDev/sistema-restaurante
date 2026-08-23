@@ -1,15 +1,15 @@
-## Que hace este PR
-Breve descripcion del cambio.
+## Qué hace este PR
 
-## Issue relacionado
-Closes #
 
-## Como probarlo
+
+## Cómo probarlo
+
 1.
 2.
 
 ## Checklist
+
 - [ ] El proyecto compila
-- [ ] Probe el caso feliz y al menos un caso de error
+- [ ] Probé lo que cambié
 - [ ] No subo archivos generados ni credenciales
-- [ ] La rama esta actualizada con develop
+- [ ] La rama está actualizada con `develop`
