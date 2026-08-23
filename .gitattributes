@@ -1,0 +1,17 @@
+# Normaliza finales de linea: LF en el repositorio, nativo en el disco
+* text=auto
+
+# Texto: siempre LF dentro del repositorio
+*.java  text eol=lf
+*.md    text eol=lf
+*.xml   text eol=lf
+*.json  text eol=lf
+
+# Binarios: Git no los toca nunca
+*.pdf   binary
+*.docx  binary
+*.xlsm  binary
+*.png   binary
+*.jpg   binary
+*.class binary
+*.jar   binary
