@@ -9,8 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static view.AdaptadorTablaModelo.col;
-
 /**
  * Busqueda de mesas por numero o por estado. Los resultados se pintan con
  * el mismo adaptador y las mismas columnas que el listado.
@@ -74,11 +72,7 @@ public class GUIBuscarMesa extends JFrame {
             return;
         }
 
-        tabla.setModel(new AdaptadorTablaModelo<>(resultados, List.of(
-                col("ID", Mesa::getId),
-                col("Numero", Mesa::getNumero),
-                col("Capacidad", Mesa::getCapacidad),
-                col("Estado", Mesa::getEstado))));
+        tabla.setModel(new AdaptadorTablaModelo<>(resultados, GUIListarMesas.columnas()));
 
         if (resultados.isEmpty()) {
             ComponentesGUI.aviso(this, "No se encontraron mesas.");
