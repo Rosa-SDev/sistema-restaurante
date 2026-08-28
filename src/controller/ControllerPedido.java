@@ -126,6 +126,14 @@ public class ControllerPedido {
         actualizar();
     }
 
+    /**
+     * Cierra el pedido, lo que ademas libera su mesa.
+     *
+     * Exige que haya un pago registrado: cerrar() deja el pedido en PAGADO y
+     * suelta la mesa, asi que sin esta guarda se liberarian mesas sin haber
+     * cobrado. Quien registra el pago es ControllerFactura, que cobra el total
+     * con impuestos y solo despues llama aqui.
+     */
     public static void cerrarPedido(Pedido pedido) throws RuntimeException {
         if (pedido == null) {
             throw new RuntimeException("Error: pedido nulo.");
@@ -135,6 +143,9 @@ public class ControllerPedido {
         }
         if (pedido.getEstado() == EstadoPedido.PAGADO) {
             throw new RuntimeException("Error: el pedido ya esta cerrado.");
+        }
+        if (!pedido.estaPagado()) {
+            throw new RuntimeException("Error: no se puede cerrar el pedido sin un pago registrado.");
         }
         pedido.cerrar();
         actualizar();
