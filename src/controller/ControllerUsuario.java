@@ -1,5 +1,6 @@
 package controller;
 
+import model.Cajero;
 import model.Cocinero;
 import model.IActualizable;
 import model.Mesero;
@@ -52,6 +53,16 @@ public class ControllerUsuario {
             }
         }
         return cocineros;
+    }
+
+    public static List<Cajero> listarCajeros() {
+        List<Cajero> cajeros = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof Cajero) {
+                cajeros.add((Cajero) usuario);
+            }
+        }
+        return cajeros;
     }
 
     public static Usuario buscarUsuario(int id) {

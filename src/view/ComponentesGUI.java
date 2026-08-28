@@ -3,6 +3,9 @@ package view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.function.Function;
 
 /**
@@ -107,6 +110,17 @@ public class ComponentesGUI {
                 return this;
             }
         };
+    }
+
+    /**
+     * Formatea dinero en pesos colombianos. Todas las vistas lo muestran igual,
+     * y ninguna vuelve a convertir un BigDecimal a double para pintarlo.
+     */
+    public static String moneda(BigDecimal valor) {
+        if (valor == null) {
+            return NumberFormat.getCurrencyInstance(Locale.of("es", "CO")).format(BigDecimal.ZERO);
+        }
+        return NumberFormat.getCurrencyInstance(Locale.of("es", "CO")).format(valor);
     }
 
     public static JTable tabla() {

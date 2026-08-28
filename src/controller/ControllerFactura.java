@@ -109,6 +109,32 @@ public class ControllerFactura {
         actualizar();
     }
 
+    /**
+     * Suma el total de las facturas vigentes.
+     *
+     * Las anuladas no cuentan: siguen en la lista como constancia de lo que se
+     * facturo, pero ya no representan dinero cobrado.
+     */
+    public static BigDecimal calcularTotalFacturado() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Factura factura : facturas) {
+            if (!factura.isAnulada()) {
+                total = total.add(factura.getTotal());
+            }
+        }
+        return total;
+    }
+
+    public static int contarAnuladas() {
+        int anuladas = 0;
+        for (Factura factura : facturas) {
+            if (factura.isAnulada()) {
+                anuladas++;
+            }
+        }
+        return anuladas;
+    }
+
     public static List<Factura> listarFacturas() {
         return new ArrayList<>(facturas);
     }
