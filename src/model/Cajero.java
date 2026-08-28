@@ -6,9 +6,9 @@ public class Cajero extends Usuario {
         super(id, nombre, correo, password);
     }
 
-    // Registra el pago en el pedido
-    public void cobrar( Pedido p, MetodoPago met ) {
-        p.registrarPago(met, p.calcularTotal());
+    // Se delega al controlador, que calcula el total con impuestos
+    public void cobrar(Pedido p, MetodoPago met) {
+
     }
 
     // Se delega al controlador
