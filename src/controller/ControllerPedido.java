@@ -79,6 +79,11 @@ public class ControllerPedido {
         return resultados;
     }
 
+    /** Cuantos pedidos hay en un estado. La vista pregunta, no cuenta. */
+    public static int contarPorEstado(EstadoPedido estado) {
+        return buscarPedido(estado).size();
+    }
+
     /**
      * Agrega el platillo tantas veces como diga la cantidad.
      *
@@ -86,11 +91,6 @@ public class ControllerPedido {
      * que esta es la unica defensa que hay: si aqui no se mira, la lista se llena
      * de nulos y revienta despues, al calcular el total.
      */
-    /** Cuantos pedidos hay en un estado. La vista pregunta, no cuenta. */
-    public static int contarPorEstado(EstadoPedido estado) {
-        return buscarPedido(estado).size();
-    }
-
     public static void agregarPlatillo(Pedido pedido, Platillo platillo, int cantidad) throws RuntimeException {
         if (pedido == null) {
             throw new RuntimeException("Error: pedido nulo.");
