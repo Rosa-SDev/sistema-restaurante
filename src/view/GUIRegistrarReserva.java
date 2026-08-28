@@ -15,13 +15,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-/**
- * Formulario de registro de reservas.
- *
- * Respecto a la version anterior: CanalReserva desaparecio y se agrego el
- * combo de mesero (relacion 10 del diagrama). El cliente es obligatorio
- * porque la relacion 8 es de cardinalidad 1.
- */
 public class GUIRegistrarReserva extends JFrame {
 
     private JTextField idTexto, numPersonasTexto;
