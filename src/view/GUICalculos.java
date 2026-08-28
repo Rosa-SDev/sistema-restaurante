@@ -7,7 +7,6 @@ import controller.ControllerPlatillo;
 import model.EstadoMesa;
 import model.EstadoPedido;
 import model.Factura;
-import model.IDescontable;
 import model.Pedido;
 import model.Platillo;
 
@@ -77,12 +76,11 @@ public class GUICalculos extends JFrame {
                 throw new RuntimeException("Error: el descuento debe estar entre 1% y 50%.");
             }
 
-            if (!(platillo instanceof IDescontable)) {
-                throw new RuntimeException("Error: este elemento no admite descuentos.");
-            }
-
+            // Aqui habia un "if (!(platillo instanceof IDescontable))". Sobra:
+            // Platillo implementa IDescontable, asi que la condicion nunca se
+            // cumplia. Un tipo descontable mas volveria util la comprobacion.
             BigDecimal precioAnterior = platillo.getPrecio();
-            BigDecimal descuento = ((IDescontable) platillo).aplicarDescuento(porcentaje);
+            BigDecimal descuento = platillo.aplicarDescuento(porcentaje);
 
             // El descuento cambia el objeto; se avisa al controlador para que
             // notifique a los observadores y las tablas abiertas se repinten.
