@@ -6,14 +6,11 @@ import controller.ControllerPedido;
 import controller.ControllerPlatillo;
 import model.EstadoMesa;
 import model.EstadoPedido;
-import model.Factura;
-import model.Pedido;
 import model.Platillo;
 
 import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * Descuentos sobre la carta y reporte de totales del restaurante.
@@ -23,7 +20,6 @@ import java.math.RoundingMode;
  */
 public class GUICalculos extends JFrame {
 
-    private static final int DECIMALES = 2;
     private static final BigDecimal DESCUENTO_MAXIMO = new BigDecimal("50");
 
     private JTextField idTexto, nombreTexto, porcentajeTexto;
@@ -133,22 +129,22 @@ public class GUICalculos extends JFrame {
         texto.append("=".repeat(50)).append("\n\n");
 
         texto.append("FACTURACION\n");
-        texto.append(linea("Total facturado (sin anuladas)", ComponentesGUI.moneda(totalFacturado())));
+        texto.append(linea("Total facturado (sin anuladas)", ComponentesGUI.moneda(ControllerFactura.calcularTotalFacturado())));
         texto.append(linea("Facturas emitidas", String.valueOf(ControllerFactura.listarFacturas().size())));
-        texto.append(linea("Facturas anuladas", String.valueOf(facturasAnuladas())));
+        texto.append(linea("Facturas anuladas", String.valueOf(ControllerFactura.contarAnuladas())));
         texto.append("\n");
 
         texto.append("PEDIDOS\n");
         texto.append(linea("Pedidos registrados", String.valueOf(ControllerPedido.listarPedidos().size())));
-        texto.append(linea("Abiertos", String.valueOf(pedidosEn(EstadoPedido.ABIERTO))));
-        texto.append(linea("Pagados", String.valueOf(pedidosEn(EstadoPedido.PAGADO))));
-        texto.append(linea("Cancelados", String.valueOf(pedidosEn(EstadoPedido.CANCELADO))));
+        texto.append(linea("Abiertos", String.valueOf(ControllerPedido.contarPorEstado(EstadoPedido.ABIERTO))));
+        texto.append(linea("Pagados", String.valueOf(ControllerPedido.contarPorEstado(EstadoPedido.PAGADO))));
+        texto.append(linea("Cancelados", String.valueOf(ControllerPedido.contarPorEstado(EstadoPedido.CANCELADO))));
         texto.append("\n");
 
         texto.append("CARTA\n");
         texto.append(linea("Platillos en la carta", String.valueOf(ControllerPlatillo.listarPlatillos().size())));
-        texto.append(linea("Disponibles", String.valueOf(platillosDisponibles())));
-        texto.append(linea("Precio promedio", ComponentesGUI.moneda(precioPromedio())));
+        texto.append(linea("Disponibles", String.valueOf(ControllerPlatillo.contarDisponibles())));
+        texto.append(linea("Precio promedio", ComponentesGUI.moneda(ControllerPlatillo.calcularPrecioPromedio())));
         texto.append("\n");
 
         texto.append("SALON\n");
@@ -165,52 +161,7 @@ public class GUICalculos extends JFrame {
         return String.format("  %-34s %s%n", concepto, valor);
     }
 
-    private BigDecimal totalFacturado() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (Factura factura : ControllerFactura.listarFacturas()) {
-            if (!factura.isAnulada()) {
-                total = total.add(factura.getTotal());
-            }
-        }
-        return total.setScale(DECIMALES, RoundingMode.HALF_UP);
-    }
-
-    private int facturasAnuladas() {
-        int anuladas = 0;
-        for (Factura factura : ControllerFactura.listarFacturas()) {
-            if (factura.isAnulada()) {
-                anuladas++;
-            }
-        }
-        return anuladas;
-    }
-
-    private int pedidosEn(EstadoPedido estado) {
-        return ControllerPedido.buscarPedido(estado).size();
-    }
-
-    private int platillosDisponibles() {
-        int disponibles = 0;
-        for (Platillo platillo : ControllerPlatillo.listarPlatillos()) {
-            if (platillo.isDisponible()) {
-                disponibles++;
-            }
-        }
-        return disponibles;
-    }
-
-    private BigDecimal precioPromedio() {
-        java.util.List<Platillo> platillos = ControllerPlatillo.listarPlatillos();
-        if (platillos.isEmpty()) {
-            return BigDecimal.ZERO.setScale(DECIMALES);
-        }
-        BigDecimal suma = BigDecimal.ZERO;
-        for (Platillo platillo : platillos) {
-            suma = suma.add(platillo.getPrecio());
-        }
-        return suma.divide(new BigDecimal(platillos.size()), DECIMALES, RoundingMode.HALF_UP);
-    }
-
+    /** Solo adapta el enum al parametro de texto del controlador; no calcula nada. */
     private int mesasEn(EstadoMesa estado) {
         return ControllerMesa.buscarMesa(estado.name()).size();
     }

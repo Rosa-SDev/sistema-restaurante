@@ -4,6 +4,7 @@ import model.IActualizable;
 import model.Platillo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,31 @@ public class ControllerPlatillo {
 
     public static List<Platillo> listarPlatillos() {
         return new ArrayList<>(platillos);
+    }
+
+    public static int contarDisponibles() {
+        int disponibles = 0;
+        for (Platillo platillo : platillos) {
+            if (platillo.isDisponible()) {
+                disponibles++;
+            }
+        }
+        return disponibles;
+    }
+
+    /**
+     * Precio medio de la carta, con dos decimales.
+     * Una carta vacia devuelve cero, para no dividir entre cero.
+     */
+    public static BigDecimal calcularPrecioPromedio() {
+        if (platillos.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal suma = BigDecimal.ZERO;
+        for (Platillo platillo : platillos) {
+            suma = suma.add(platillo.getPrecio());
+        }
+        return suma.divide(new BigDecimal(platillos.size()), 2, RoundingMode.HALF_UP);
     }
 
     public static Platillo buscarPlatillo(int id) {
