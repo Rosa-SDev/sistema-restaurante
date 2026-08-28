@@ -6,23 +6,40 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.function.Supplier;
 
 /**
  * Ventana principal de la aplicacion: la barra de menus y el panel de bienvenida.
  *
- * Los menus de gestion nacen DESHABILITADOS a proposito. Sus ventanas todavia no
- * existen en su mayoria, y un item que llama a una clase inexistente no compila.
- * Cada uno se habilita cuando se le conecte su vista, en la fase de integracion,
- * junto con el filtrado por rol del usuario conectado.
+ * Cada opcion de gestion abre su ventana. La ventana se construye en el momento
+ * de pulsar el item, no al arrancar: si se crearan todas de una vez, cada listado
+ * se registraria como observador desde el primer segundo y la aplicacion abriria
+ * dos docenas de JFrame invisibles.
  *
- * Por la misma razon aqui no hay "Cerrar sesion": es la unica opcion que
- * referenciaria a GUILogin, que aun no esta en develop.
+ * El menu Reservas es la unica excepcion: sus opciones se ven pero estan
+ * deshabilitadas porque todavia no existen las ventanas de reservas.
+ * ControllerReserva si esta, asi que es un pendiente de vista, no de logica.
+ *
+ * El filtrado de estas opciones segun el rol del usuario conectado se hace
+ * aparte, a partir de Sesion.getActual().
+ *
+ * Limitacion conocida: las ventanas ya abiertas sobreviven al cierre de sesion,
+ * porque son JFrame independientes y no ventanas hijas de esta.
  */
 public class GUIPrincipal extends JFrame {
 
+    private JMenuItem cerrarSesion;
     private JMenuItem salir;
     private JMenuItem autores;
     private JMenuItem infoEmpresa;
+
+    private JMenu menuUsuarios;
+    private JMenu menuClientes;
+    private JMenu menuMesas;
+    private JMenu menuCarta;
+    private JMenu menuPedidos;
+    private JMenu menuReservas;
+    private JMenu menuOperaciones;
 
     public GUIPrincipal() {
         ComponentesGUI.configurar(this, "Sistema de Restaurante", 600, 450);
@@ -45,7 +62,11 @@ public class GUIPrincipal extends JFrame {
 
     private void crearMenu() {
         JMenu archivo = new JMenu("Archivo");
+        cerrarSesion = new JMenuItem("Cerrar sesion");
         salir = new JMenuItem("Salir");
+        archivo.add(cerrarSesion);
+        // Cerrar sesion deja la aplicacion viva y Salir la mata: no son lo mismo
+        archivo.addSeparator();
         archivo.add(salir);
 
         JMenu ayuda = new JMenu("Ayuda");
@@ -53,21 +74,79 @@ public class GUIPrincipal extends JFrame {
         infoEmpresa = new JMenuItem("Restaurante");
         agregarItems(ayuda, autores, infoEmpresa);
 
+        menuUsuarios = menu("Usuarios",
+                item("Agregar", () -> new GUIAgregarUsuario(false)),
+                item("Eliminar", GUIEliminarUsuario::new),
+                item("Actualizar", GUIActualizarUsuario::new),
+                item("Buscar", GUIBuscarUsuario::new),
+                item("Listar", GUIListarUsuarios::new));
+
+        menuClientes = menu("Clientes",
+                item("Agregar", () -> new GUIAgregarCliente(false)),
+                item("Eliminar", GUIEliminarCliente::new),
+                item("Actualizar", GUIActualizarCliente::new),
+                item("Buscar", GUIBuscarCliente::new),
+                item("Listar", GUIListarClientes::new));
+
+        menuMesas = menu("Mesas",
+                item("Agregar", () -> new GUIAgregarMesa(false)),
+                item("Eliminar", GUIEliminarMesa::new),
+                item("Actualizar", GUIActualizarMesa::new),
+                item("Buscar", GUIBuscarMesa::new),
+                item("Listar", GUIListarMesas::new));
+
+        menuCarta = menu("Carta",
+                item("Agregar platillo", () -> new GUIAgregarPlatillo(false)),
+                item("Eliminar platillo", GUIEliminarPlatillo::new),
+                item("Actualizar platillo", GUIActualizarPlatillo::new),
+                item("Buscar platillo", GUIBuscarPlatillo::new),
+                item("Listar carta", GUIListarPlatillos::new));
+
+        menuPedidos = menu("Pedidos",
+                item("Crear pedido", GUICrearPedido::new),
+                item("Gestionar pedido", GUIGestionarPedido::new),
+                item("Facturar pedido", GUIFacturarPedido::new),
+                item("Buscar pedido", GUIBuscarPedido::new),
+                item("Listar pedidos", GUIListarPedidos::new),
+                item("Listar facturas", GUIListarFacturas::new));
+
+        menuReservas = menuPendiente("Reservas", "Registrar reserva", "Confirmar / cancelar",
+                "Buscar reserva", "Listar reservas");
+
+        menuOperaciones = menu("Operaciones",
+                item("Calculos", GUICalculos::new));
+
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(archivo);
-        menuBar.add(menuPendiente("Usuarios", "Agregar", "Eliminar", "Actualizar", "Buscar", "Listar"));
-        menuBar.add(menuPendiente("Clientes", "Agregar", "Eliminar", "Actualizar", "Buscar", "Listar"));
-        menuBar.add(menuPendiente("Mesas", "Agregar", "Eliminar", "Actualizar", "Buscar", "Listar"));
-        menuBar.add(menuPendiente("Carta", "Agregar platillo", "Eliminar platillo", "Actualizar platillo",
-                "Buscar platillo", "Listar carta"));
-        menuBar.add(menuPendiente("Pedidos", "Crear pedido", "Gestionar pedido", "Facturar pedido",
-                "Buscar pedido", "Listar pedidos", "Listar facturas"));
-        menuBar.add(menuPendiente("Reservas", "Registrar reserva", "Confirmar / cancelar", "Buscar reserva",
-                "Listar reservas"));
-        menuBar.add(menuPendiente("Operaciones", "Calculos"));
+        menuBar.add(menuUsuarios);
+        menuBar.add(menuClientes);
+        menuBar.add(menuMesas);
+        menuBar.add(menuCarta);
+        menuBar.add(menuPedidos);
+        menuBar.add(menuReservas);
+        menuBar.add(menuOperaciones);
         menuBar.add(ayuda);
 
         setJMenuBar(menuBar);
+    }
+
+    /**
+     * Item que abre una ventana al pulsarlo.
+     *
+     * Recibe un Supplier y no un JFrame ya construido para que la ventana nazca
+     * en cada pulsacion: asi se abre siempre en blanco y, si el usuario la cerro,
+     * la siguiente vez vuelve a aparecer.
+     */
+    private JMenuItem item(String texto, Supplier<JFrame> ventana) {
+        JMenuItem item = new JMenuItem(texto);
+        item.addActionListener(e -> ventana.get().setVisible(true));
+        return item;
+    }
+
+    private JMenu menu(String titulo, JMenuItem... items) {
+        JMenu menu = new JMenu(titulo);
+        agregarItems(menu, items);
+        return menu;
     }
 
     /** Menu cuyas opciones ya se ven, pero todavia no tienen ventana que abrir. */
@@ -77,17 +156,19 @@ public class GUIPrincipal extends JFrame {
             items[i] = new JMenuItem(textos[i]);
             items[i].setEnabled(false);
         }
-        JMenu menu = new JMenu(titulo);
-        agregarItems(menu, items);
-        return menu;
+        return menu(titulo, items);
     }
 
+    /**
+     * Agrega los items al menu, sin separadores.
+     *
+     * Los separadores se ponen a mano donde de verdad agrupan opciones distintas.
+     * Puestos entre cada par, un menu de seis opciones sale con cinco lineas
+     * dentro y no separa nada.
+     */
     private void agregarItems(JMenu menu, JMenuItem... items) {
-        for (int i = 0; i < items.length; i++) {
-            menu.add(items[i]);
-            if (i < items.length - 1) {
-                menu.addSeparator();
-            }
+        for (JMenuItem item : items) {
+            menu.add(item);
         }
     }
 
@@ -113,6 +194,8 @@ public class GUIPrincipal extends JFrame {
     }
 
     private void activarOpciones() {
+        cerrarSesion.addActionListener(e -> confirmarCierreDeSesion());
+
         salir.addActionListener(e -> confirmarSalida());
 
         autores.addActionListener(e -> JOptionPane.showMessageDialog(this,
@@ -124,6 +207,20 @@ public class GUIPrincipal extends JFrame {
                 Restaurante.getInstancia().toString(),
                 "Informacion del restaurante",
                 JOptionPane.INFORMATION_MESSAGE));
+    }
+
+    /**
+     * Cierra la sesion y devuelve el control al login.
+     *
+     * Cerrar sesion no es salir: la aplicacion sigue viva y otro usuario puede
+     * entrar. Por eso hay dispose() y no System.exit().
+     */
+    private void confirmarCierreDeSesion() {
+        if (ComponentesGUI.confirmar(this, "Quieres cerrar la sesion?")) {
+            Sesion.cerrar();
+            new GUILogin().setVisible(true);
+            dispose();
+        }
     }
 
     private void confirmarSalida() {
