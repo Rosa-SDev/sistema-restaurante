@@ -1,3 +1,5 @@
+# Cómo contribuir
+
 ## Flujo de ramas
 
 Usamos Git Flow adaptado.
