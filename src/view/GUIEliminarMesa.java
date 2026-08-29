@@ -21,13 +21,13 @@ public class GUIEliminarMesa extends JFrame {
         idTexto = ComponentesGUI.campoTexto();
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:"},
+                new String[]{"ID:"},
                 new JComponent[]{idTexto});
 
         JButton eliminarBTN = new JButton("Eliminar");
         eliminarBTN.addActionListener(e -> eliminar());
 
-        add(ComponentesGUI.titulo("Ingrese el Id de la mesa a eliminar"), BorderLayout.NORTH);
+        add(ComponentesGUI.titulo("Ingrese el ID de la mesa a eliminar"), BorderLayout.NORTH);
         add(formulario, BorderLayout.CENTER);
         add(ComponentesGUI.panelBotones(eliminarBTN), BorderLayout.SOUTH);
     }
@@ -38,9 +38,9 @@ public class GUIEliminarMesa extends JFrame {
             Mesa mesa = ControllerMesa.buscarMesa(id);
 
             if (mesa == null) {
-                throw new RuntimeException("Error: no se encontro una mesa con ese ID.");
+                throw new RuntimeException("Error: no se encontró una mesa con ese ID.");
             }
-            if (!ComponentesGUI.confirmar(this, "Seguro que desea eliminar la mesa " + mesa.getNumero() + "?")) {
+            if (!ComponentesGUI.confirmar(this, "¿Seguro que desea eliminar la mesa " + mesa.getNumero() + "?")) {
                 return;
             }
 
@@ -49,7 +49,7 @@ public class GUIEliminarMesa extends JFrame {
             idTexto.setText("");
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }

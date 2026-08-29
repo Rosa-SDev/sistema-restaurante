@@ -49,10 +49,10 @@ public class GUIListarPlatillos extends JFrame implements IActualizable {
         return List.of(
                 col("ID", Platillo::getId),
                 col("Nombre", Platillo::getNombre),
-                col("Categoria", Platillo::getCategoria),
-                col("Descripcion", Platillo::getDescripcion),
+                col("Categoría", Platillo::getCategoria),
+                col("Descripción", Platillo::getDescripcion),
                 col("Precio", p -> ComponentesGUI.moneda(p.getPrecio())),
-                col("Disponible", p -> p.isDisponible() ? "Si" : "No"));
+                col("Disponible", p -> p.isDisponible() ? "Sí" : "No"));
     }
 
     @Override

@@ -39,7 +39,7 @@ public class ControllerReserva {
             throw new RuntimeException("Error: la reserva necesita una mesa.");
         }
         if (reserva.getNumPersonas() <= 0) {
-            throw new RuntimeException("Error: el numero de personas debe ser mayor que cero.");
+            throw new RuntimeException("Error: el número de personas debe ser mayor que cero.");
         }
         if (reserva.getNumPersonas() > reserva.getMesa().getCapacidad()) {
             throw new RuntimeException("Error: la mesa " + reserva.getMesa().getNumero()
@@ -67,7 +67,7 @@ public class ControllerReserva {
         }
         if (reserva.getMesa().getEstado() == EstadoMesa.OCUPADA) {
             throw new RuntimeException("Error: la mesa " + reserva.getMesa().getNumero()
-                    + " esta ocupada y no se puede reservar.");
+                    + " está ocupada y no se puede reservar.");
         }
         reserva.confirmar();
         actualizar();
@@ -76,7 +76,7 @@ public class ControllerReserva {
     public static void cancelarReserva(Reserva reserva) throws RuntimeException {
         validarExistente(reserva);
         if (reserva.getEstado() == EstadoReserva.CANCELADA) {
-            throw new RuntimeException("Error: la reserva ya esta cancelada.");
+            throw new RuntimeException("Error: la reserva ya está cancelada.");
         }
         if (reserva.getEstado() == EstadoReserva.CUMPLIDA) {
             throw new RuntimeException("Error: no se puede cancelar una reserva ya cumplida.");

@@ -35,7 +35,7 @@ public class GUIAgregarUsuario extends JFrame {
         rolCombo = ComponentesGUI.combo(ROLES);
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[] {"Rol:", "Id:", "Nombre:", "Correo:", "Contraseña:"},
+                new String[] {"Rol:", "ID:", "Nombre:", "Correo:", "Contraseña:"},
                 new JComponent[] {rolCombo, idTexto, nombreTexto, correoTexto, passwordTexto}
         );
 
@@ -68,7 +68,7 @@ public class GUIAgregarUsuario extends JFrame {
                 }
 
                 ControllerUsuario.actualizarUsuario(existente);
-                ComponentesGUI.exito(this, "Usuario actualizado con exito.");
+                ComponentesGUI.exito(this, "Usuario actualizado con éxito.");
 
             } else {
 
@@ -80,13 +80,13 @@ public class GUIAgregarUsuario extends JFrame {
                 };
 
                 ControllerUsuario.agregarUsuario(usuario);
-                ComponentesGUI.exito(this, "Usuario agregado con exito.");
+                ComponentesGUI.exito(this, "Usuario agregado con éxito.");
 
             }
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
 
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());

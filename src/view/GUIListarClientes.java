@@ -48,7 +48,7 @@ public class GUIListarClientes extends JFrame implements IActualizable {
                 col("ID", Cliente::getId),
                 col("Nombre", Cliente::getNombre),
                 col("Documento", Cliente::getDocumento),
-                col("Telefono", Cliente::getTelefono));
+                col("Teléfono", Cliente::getTelefono));
     }
 
     @Override

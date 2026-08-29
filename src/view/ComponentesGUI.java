@@ -147,7 +147,7 @@ public class ComponentesGUI {
     }
 
     public static void exito(Component padre, String mensaje) {
-        JOptionPane.showMessageDialog(padre, mensaje, "Operacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(padre, mensaje, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void aviso(Component padre, String mensaje) {

@@ -29,7 +29,7 @@ public class GUIAgregarCliente extends JFrame {
         telefonoTexto = ComponentesGUI.campoTexto();
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:", "Nombre:", "Documento:", "Telefono:"},
+                new String[]{"ID:", "Nombre:", "Documento:", "Teléfono:"},
                 new JComponent[]{idTexto, nombreTexto, documentoTexto, telefonoTexto});
 
         JButton guardarBTN = new JButton(accion);
@@ -50,15 +50,15 @@ public class GUIAgregarCliente extends JFrame {
 
             if (esActualizar) {
                 ControllerCliente.actualizarCliente(cliente);
-                ComponentesGUI.exito(this, "Cliente actualizado con exito.");
+                ComponentesGUI.exito(this, "Cliente actualizado con éxito.");
             } else {
                 ControllerCliente.agregarCliente(cliente);
-                ComponentesGUI.exito(this, "Cliente agregado con exito.");
+                ComponentesGUI.exito(this, "Cliente agregado con éxito.");
             }
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }

@@ -21,13 +21,13 @@ public class GUIActualizarCliente extends JFrame {
         idTexto = ComponentesGUI.campoTexto();
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:"},
+                new String[]{"ID:"},
                 new JComponent[]{idTexto});
 
         JButton cargarBTN = new JButton("Cargar datos");
         cargarBTN.addActionListener(e -> cargar());
 
-        add(ComponentesGUI.titulo("Ingrese el Id del cliente que desea actualizar"), BorderLayout.NORTH);
+        add(ComponentesGUI.titulo("Ingrese el ID del cliente que desea actualizar"), BorderLayout.NORTH);
         add(formulario, BorderLayout.CENTER);
         add(ComponentesGUI.panelBotones(cargarBTN), BorderLayout.SOUTH);
     }
@@ -37,7 +37,7 @@ public class GUIActualizarCliente extends JFrame {
             Cliente cliente = ControllerCliente.buscarCliente(Integer.parseInt(idTexto.getText().trim()));
 
             if (cliente == null) {
-                ComponentesGUI.aviso(this, "No se encontro un cliente con ese ID.");
+                ComponentesGUI.aviso(this, "No se encontró un cliente con ese ID.");
                 return;
             }
 
@@ -47,7 +47,7 @@ public class GUIActualizarCliente extends JFrame {
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
         }
     }
 }

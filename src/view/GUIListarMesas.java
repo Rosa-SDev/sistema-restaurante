@@ -51,7 +51,7 @@ public class GUIListarMesas extends JFrame implements IActualizable {
     public static List<Columna<Mesa>> columnas() {
         return List.of(
                 col("ID", Mesa::getId),
-                col("Numero", Mesa::getNumero),
+                col("Número", Mesa::getNumero),
                 col("Capacidad", Mesa::getCapacidad),
                 col("Estado", Mesa::getEstado));
     }

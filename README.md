@@ -90,8 +90,11 @@ javac -encoding UTF-8 -d bin (Get-ChildItem -Recurse -Filter *.java src).FullNam
 java -cp bin Main
 ```
 
-El proyecto no declara la codificación en ningún archivo de configuración, así que
-`-encoding UTF-8` es obligatorio: sin él las tildes de la interfaz se corrompen.
+El proyecto declara la codificación UTF-8 en `.editorconfig`, que IntelliJ, VS Code
+y Cursor respetan al guardar. Al compilar, desde JDK 18 (JEP 400) `javac` ya usa
+UTF-8 por defecto y este proyecto apunta a openjdk-25, pero `-encoding UTF-8` sigue
+siendo obligatorio para quien compile con JDK 17 o anterior: sin él las tildes de
+la interfaz se corrompen.
 
 ## Datos de demostración
 

@@ -62,7 +62,7 @@ public class GUIFacturarPedido extends JFrame {
         detalle.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Pedido:", "Cajero:", "Metodo de pago:", "Monto recibido:"},
+                new String[]{"Pedido:", "Cajero:", "Método de pago:", "Monto recibido:"},
                 new JComponent[]{pedidoCombo, cajeroCombo, metodoCombo, montoTexto});
 
         JButton facturarBTN = new JButton("Emitir factura");
@@ -140,12 +140,12 @@ public class GUIFacturarPedido extends JFrame {
                             + "Impuestos: " + ComponentesGUI.moneda(factura.getImpuestos()) + "\n"
                             + "Total:     " + ComponentesGUI.moneda(factura.getTotal()) + "\n"
                             + "Cambio:    " + ComponentesGUI.moneda(cambio) + "\n\n"
-                            + "La mesa " + pedido.getMesa().getNumero() + " quedo LIBRE.",
+                            + "La mesa " + pedido.getMesa().getNumero() + " quedó LIBRE.",
                     "Factura emitida", JOptionPane.INFORMATION_MESSAGE);
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El monto recibido debe ser un numero valido.");
+            ComponentesGUI.error(this, "El monto recibido debe ser un número válido.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }

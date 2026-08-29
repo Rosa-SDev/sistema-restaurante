@@ -66,7 +66,7 @@ public class GUICrearPedido extends JFrame {
         }
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id del pedido:", "Mesa:", "Mesero:", "Cliente (opcional):", "Observaciones:"},
+                new String[]{"ID del pedido:", "Mesa:", "Mesero:", "Cliente (opcional):", "Observaciones:"},
                 new JComponent[]{idTexto, mesaCombo, meseroCombo, clienteCombo, observacionesTexto});
 
         JButton crearBTN = new JButton("Crear pedido");
@@ -98,12 +98,12 @@ public class GUICrearPedido extends JFrame {
                     observacionesTexto.getText().trim());
 
             ControllerPedido.crearPedido(pedido);
-            ComponentesGUI.exito(this, "Pedido creado. La mesa " + mesa.getNumero() + " quedo OCUPADA.\n"
+            ComponentesGUI.exito(this, "Pedido creado. La mesa " + mesa.getNumero() + " quedó OCUPADA.\n"
                     + "Use 'Gestionar pedido' para agregarle platillos.");
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }

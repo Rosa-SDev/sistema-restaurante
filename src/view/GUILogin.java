@@ -19,7 +19,7 @@ public class GUILogin extends JFrame {
     private JPasswordField claveTexto;
 
     public GUILogin() {
-        ComponentesGUI.configurar(this, "Iniciar sesion", 420, 260);
+        ComponentesGUI.configurar(this, "Iniciar sesión", 420, 260);
         // Cerrar el login es salir de la aplicacion: todavia no hay nada abierto
         // detras, asi que reemplaza el DISPOSE_ON_CLOSE que deja configurar().
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,7 +30,7 @@ public class GUILogin extends JFrame {
         claveTexto.setBorder(EstilosGUI.GRAY_BORDER);
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Correo:", "Contrasena:"},
+                new String[]{"Correo:", "Contraseña:"},
                 new JComponent[]{correoTexto, claveTexto});
 
         JButton entrarBTN = new JButton("Entrar");
@@ -53,7 +53,7 @@ public class GUILogin extends JFrame {
         // equivocada y usuario inactivo. Decir cual de ellos fallo le confirma
         // a cualquiera que correos estan registrados.
         if (usuario == null) {
-            ComponentesGUI.error(this, "Correo o contrasena incorrectos.");
+            ComponentesGUI.error(this, "Correo o contraseña incorrectos.");
             claveTexto.setText("");
             return;
         }

@@ -55,7 +55,7 @@ public class GUIListarFacturas extends JFrame implements IActualizable {
         filas = ControllerFactura.listarFacturas();
         tabla.setModel(new AdaptadorTablaModelo<>(filas, List.of(
                 col("ID", Factura::getId),
-                col("Numero", Factura::getNumero),
+                col("Número", Factura::getNumero),
                 col("Fecha", f -> f.getFecha() != null ? f.getFecha().format(FORMATO) : "-"),
                 col("Pedido", f -> "#" + f.getPedido().getId()),
                 col("Cajero", f -> f.getCajero().getNombre()),
@@ -73,7 +73,7 @@ public class GUIListarFacturas extends JFrame implements IActualizable {
             }
 
             Factura factura = filas.get(fila);
-            if (!ComponentesGUI.confirmar(this, "Anular la factura " + factura.getNumero() + "?")) {
+            if (!ComponentesGUI.confirmar(this, "¿Anular la factura " + factura.getNumero() + "?")) {
                 return;
             }
 

@@ -55,7 +55,7 @@ public class ControllerCliente {
         if (clienteActualizado == null
                 || clienteActualizado.getNombre() == null || clienteActualizado.getNombre().isBlank()
                 || clienteActualizado.getDocumento() == null || clienteActualizado.getDocumento().isBlank()) {
-            throw new RuntimeException("Error: campos invalidos para el cliente.");
+            throw new RuntimeException("Error: campos inválidos para el cliente.");
         }
         for (int i = 0; i < clientes.size(); i++) {
             if (clientes.get(i).getId() == clienteActualizado.getId()) {
@@ -75,7 +75,7 @@ public class ControllerCliente {
                 return;
             }
         }
-        throw new RuntimeException("Error: no se encontro un cliente con ese ID.");
+        throw new RuntimeException("Error: no se encontró un cliente con ese ID.");
     }
 
     public static void eliminarCliente(String nombre) {

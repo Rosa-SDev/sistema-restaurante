@@ -100,7 +100,7 @@ public class GUIGestionarReserva extends JFrame implements IActualizable {
             Reserva reserva = seleccionada();
             ControllerReserva.confirmarReserva(reserva);
             ComponentesGUI.exito(this, "Reserva confirmada. La mesa " + reserva.getMesa().getNumero()
-                    + " quedo RESERVADA.");
+                    + " quedó RESERVADA.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
@@ -127,11 +127,11 @@ public class GUIGestionarReserva extends JFrame implements IActualizable {
     private void cancelar() {
         try {
             Reserva reserva = seleccionada();
-            if (!ComponentesGUI.confirmar(this, "Cancelar la reserva #" + reserva.getId() + "?")) {
+            if (!ComponentesGUI.confirmar(this, "¿Cancelar la reserva #" + reserva.getId() + "?")) {
                 return;
             }
             ControllerReserva.cancelarReserva(reserva);
-            ComponentesGUI.exito(this, "Reserva cancelada. La mesa quedo LIBRE.");
+            ComponentesGUI.exito(this, "Reserva cancelada. La mesa quedó LIBRE.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }

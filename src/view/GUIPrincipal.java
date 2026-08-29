@@ -64,7 +64,7 @@ public class GUIPrincipal extends JFrame {
 
     private void crearMenu() {
         JMenu archivo = new JMenu("Archivo");
-        cerrarSesion = new JMenuItem("Cerrar sesion");
+        cerrarSesion = new JMenuItem("Cerrar sesión");
         salir = new JMenuItem("Salir");
         archivo.add(cerrarSesion);
         // Cerrar sesion deja la aplicacion viva y Salir la mata: no son lo mismo
@@ -119,7 +119,7 @@ public class GUIPrincipal extends JFrame {
                 item("Listar reservas", GUIListarReservas::new));
 
         menuOperaciones = menu("Operaciones",
-                item("Calculos", GUICalculos::new));
+                item("Cálculos", GUICalculos::new));
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(archivo);
@@ -175,9 +175,9 @@ public class GUIPrincipal extends JFrame {
         panelDatos.setBorder(BorderFactory.createEmptyBorder(20, 60, 40, 60));
         panelDatos.add(etiqueta(textoConectado()));
         panelDatos.add(etiqueta("NIT: " + restaurante.getNit()));
-        panelDatos.add(etiqueta("Fundacion: " + restaurante.getFechaFundacion()));
-        panelDatos.add(etiqueta("Direccion: " + restaurante.getDireccion()));
-        panelDatos.add(etiqueta("Use el menu superior para gestionar el restaurante"));
+        panelDatos.add(etiqueta("Fundación: " + restaurante.getFechaFundacion()));
+        panelDatos.add(etiqueta("Dirección: " + restaurante.getDireccion()));
+        panelDatos.add(etiqueta("Use el menú superior para gestionar el restaurante"));
 
         add(ComponentesGUI.titulo(restaurante.getRazonSocial()), BorderLayout.NORTH);
         add(panelDatos, BorderLayout.CENTER);
@@ -198,7 +198,7 @@ public class GUIPrincipal extends JFrame {
     private String textoConectado() {
         Usuario usuario = Sesion.getActual();
         if (usuario == null) {
-            return "Sin sesion iniciada";
+            return "Sin sesión iniciada";
         }
         return "Conectado: " + usuario.getNombre()
                 + " (" + usuario.getClass().getSimpleName() + ")";
@@ -301,13 +301,13 @@ public class GUIPrincipal extends JFrame {
         salir.addActionListener(e -> confirmarSalida());
 
         autores.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Rosa - Sebastian - Daniel - Danielito\n\nv.0.1",
+                "Rosa Peña · Sebastián Gallego · Daniel Guzmán · Daniel Vanegas\n\nv.0.1",
                 "Autores",
                 JOptionPane.INFORMATION_MESSAGE));
 
         infoEmpresa.addActionListener(e -> JOptionPane.showMessageDialog(this,
                 Restaurante.getInstancia().toString(),
-                "Informacion del restaurante",
+                "Información del restaurante",
                 JOptionPane.INFORMATION_MESSAGE));
     }
 
@@ -318,7 +318,7 @@ public class GUIPrincipal extends JFrame {
      * entrar. Por eso hay dispose() y no System.exit().
      */
     private void confirmarCierreDeSesion() {
-        if (ComponentesGUI.confirmar(this, "Quieres cerrar la sesion?")) {
+        if (ComponentesGUI.confirmar(this, "¿Quieres cerrar la sesión?")) {
             Sesion.cerrar();
             new GUILogin().setVisible(true);
             dispose();
@@ -326,7 +326,7 @@ public class GUIPrincipal extends JFrame {
     }
 
     private void confirmarSalida() {
-        if (ComponentesGUI.confirmar(this, "Estas seguro de que quieres salir?")) {
+        if (ComponentesGUI.confirmar(this, "¿Estás seguro de que quieres salir?")) {
             System.exit(0);
         }
     }

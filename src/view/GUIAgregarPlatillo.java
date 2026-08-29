@@ -33,11 +33,11 @@ public class GUIAgregarPlatillo extends JFrame {
         descripcionTexto = ComponentesGUI.campoTexto();
         categoriaTexto = ComponentesGUI.campoTexto();
         precioTexto = ComponentesGUI.campoTexto();
-        disponibleCasilla = ComponentesGUI.casilla("Si");
+        disponibleCasilla = ComponentesGUI.casilla("Sí");
         disponibleCasilla.setSelected(true);
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:", "Nombre:", "Descripcion:", "Categoria:", "Precio:", "Disponible:"},
+                new String[]{"ID:", "Nombre:", "Descripción:", "Categoría:", "Precio:", "Disponible:"},
                 new JComponent[]{idTexto, nombreTexto, descripcionTexto, categoriaTexto,
                         precioTexto, disponibleCasilla});
 
@@ -61,15 +61,15 @@ public class GUIAgregarPlatillo extends JFrame {
 
             if (esActualizar) {
                 ControllerPlatillo.actualizarPlatillo(platillo);
-                ComponentesGUI.exito(this, "Platillo actualizado con exito.");
+                ComponentesGUI.exito(this, "Platillo actualizado con éxito.");
             } else {
                 ControllerPlatillo.agregarPlatillo(platillo);
-                ComponentesGUI.exito(this, "Platillo agregado con exito.");
+                ComponentesGUI.exito(this, "Platillo agregado con éxito.");
             }
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser entero y el precio un numero valido.");
+            ComponentesGUI.error(this, "El ID debe ser entero y el precio un número válido.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }

@@ -51,7 +51,7 @@ public class ControllerFactura {
             throw new RuntimeException("Error: la factura necesita un cajero.");
         }
         if (metodoPago == null) {
-            throw new RuntimeException("Error: la factura necesita un metodo de pago.");
+            throw new RuntimeException("Error: la factura necesita un método de pago.");
         }
         if (pedido.getEstado() == EstadoPedido.CANCELADO) {
             throw new RuntimeException("Error: no se puede facturar un pedido cancelado.");
@@ -103,7 +103,7 @@ public class ControllerFactura {
             throw new RuntimeException("Error: no existe esa factura.");
         }
         if (factura.isAnulada()) {
-            throw new RuntimeException("Error: la factura " + factura.getNumero() + " ya esta anulada.");
+            throw new RuntimeException("Error: la factura " + factura.getNumero() + " ya está anulada.");
         }
         factura.anular();
         actualizar();

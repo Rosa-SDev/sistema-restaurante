@@ -30,7 +30,7 @@ public class GUIBuscarCliente extends JFrame {
 
         JPanel panelFiltros = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panelFiltros.setBackground(EstilosGUI.COLOR_CLARO);
-        panelFiltros.add(new JLabel("Id:"));
+        panelFiltros.add(new JLabel("ID:"));
         panelFiltros.add(idTexto);
         panelFiltros.add(new JLabel("Nombre:"));
         panelFiltros.add(nombreTexto);
@@ -38,7 +38,7 @@ public class GUIBuscarCliente extends JFrame {
 
         JPanel panelNorte = new JPanel(new BorderLayout());
         panelNorte.setBackground(EstilosGUI.COLOR_CLARO);
-        panelNorte.add(ComponentesGUI.titulo("Buscar por Id o por nombre"), BorderLayout.NORTH);
+        panelNorte.add(ComponentesGUI.titulo("Buscar por ID o por nombre"), BorderLayout.NORTH);
         panelNorte.add(panelFiltros, BorderLayout.CENTER);
 
         tabla = ComponentesGUI.tabla();
@@ -58,11 +58,11 @@ public class GUIBuscarCliente extends JFrame {
             } else if (!nombreTexto.getText().trim().isEmpty()) {
                 resultados = ControllerCliente.buscarCliente(nombreTexto.getText().trim());
             } else {
-                ComponentesGUI.aviso(this, "Escriba un Id o un nombre para buscar.");
+                ComponentesGUI.aviso(this, "Escriba un ID o un nombre para buscar.");
                 return;
             }
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
             return;
         }
 
