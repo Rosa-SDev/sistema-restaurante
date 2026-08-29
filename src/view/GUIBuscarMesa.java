@@ -37,7 +37,7 @@ public class GUIBuscarMesa extends JFrame {
 
         JPanel panelFiltros = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panelFiltros.setBackground(EstilosGUI.COLOR_CLARO);
-        panelFiltros.add(new JLabel("Numero de mesa:"));
+        panelFiltros.add(new JLabel("Número de mesa:"));
         panelFiltros.add(numeroTexto);
         panelFiltros.add(new JLabel("Estado:"));
         panelFiltros.add(estadoCombo);
@@ -45,7 +45,7 @@ public class GUIBuscarMesa extends JFrame {
 
         JPanel panelNorte = new JPanel(new BorderLayout());
         panelNorte.setBackground(EstilosGUI.COLOR_CLARO);
-        panelNorte.add(ComponentesGUI.titulo("Buscar por numero o por estado"), BorderLayout.NORTH);
+        panelNorte.add(ComponentesGUI.titulo("Buscar por número o por estado"), BorderLayout.NORTH);
         panelNorte.add(panelFiltros, BorderLayout.CENTER);
 
         tabla = ComponentesGUI.tabla();
@@ -68,7 +68,7 @@ public class GUIBuscarMesa extends JFrame {
                 resultados = ControllerMesa.buscarMesa((String) estadoCombo.getSelectedItem());
             }
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El numero de mesa debe ser un entero.");
+            ComponentesGUI.error(this, "El número de mesa debe ser un entero.");
             return;
         }
 

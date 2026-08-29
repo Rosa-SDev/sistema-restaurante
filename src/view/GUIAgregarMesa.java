@@ -31,7 +31,7 @@ public class GUIAgregarMesa extends JFrame {
         estadoCombo = ComponentesGUI.combo(EstadoMesa.values());
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:", "Numero:", "Capacidad:", "Estado:"},
+                new String[]{"ID:", "Número:", "Capacidad:", "Estado:"},
                 new JComponent[]{idTexto, numeroTexto, capacidadTexto, estadoCombo});
 
         JButton guardarBTN = new JButton(accion);
@@ -52,15 +52,15 @@ public class GUIAgregarMesa extends JFrame {
 
             if (esActualizar) {
                 ControllerMesa.actualizarMesa(mesa);
-                ComponentesGUI.exito(this, "Mesa actualizada con exito.");
+                ComponentesGUI.exito(this, "Mesa actualizada con éxito.");
             } else {
                 ControllerMesa.agregarMesa(mesa);
-                ComponentesGUI.exito(this, "Mesa agregada con exito.");
+                ComponentesGUI.exito(this, "Mesa agregada con éxito.");
             }
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id, el numero y la capacidad deben ser numeros enteros.");
+            ComponentesGUI.error(this, "El ID, el número y la capacidad deben ser números enteros.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
