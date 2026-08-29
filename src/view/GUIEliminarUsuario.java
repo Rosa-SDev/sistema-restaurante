@@ -18,13 +18,13 @@ public class GUIEliminarUsuario extends JFrame {
         nombreTexto = ComponentesGUI.campoTexto();
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:", "Nombre:"},
+                new String[]{"ID:", "Nombre:"},
                 new JComponent[]{idTexto, nombreTexto});
 
         JButton eliminarBTN = new JButton("Eliminar");
         eliminarBTN.addActionListener(e -> eliminar());
 
-        add(ComponentesGUI.titulo("Ingrese el Id o el nombre del usuario a eliminar"), BorderLayout.NORTH);
+        add(ComponentesGUI.titulo("Ingrese el ID o el nombre del usuario a eliminar"), BorderLayout.NORTH);
         add(formulario, BorderLayout.CENTER);
         add(ComponentesGUI.panelBotones(eliminarBTN), BorderLayout.SOUTH);
     }
@@ -35,9 +35,9 @@ public class GUIEliminarUsuario extends JFrame {
                 int id = Integer.parseInt(idTexto.getText().trim());
                 Usuario usuario = ControllerUsuario.buscarUsuario(id);
                 if (usuario == null) {
-                    throw new RuntimeException("Error: no se encontro un usuario con ese ID.");
+                    throw new RuntimeException("Error: no se encontró un usuario con ese ID.");
                 }
-                if (!ComponentesGUI.confirmar(this, "Seguro que desea eliminar a " + usuario.getNombre() + "?")) {
+                if (!ComponentesGUI.confirmar(this, "¿Seguro que desea eliminar a " + usuario.getNombre() + "?")) {
                     return;
                 }
                 ControllerUsuario.eliminarUsuario(id);
@@ -45,15 +45,15 @@ public class GUIEliminarUsuario extends JFrame {
             } else if (!nombreTexto.getText().trim().isEmpty()) {
                 String nombre = nombreTexto.getText().trim();
                 if (ControllerUsuario.buscarUsuario(nombre).isEmpty()) {
-                    throw new RuntimeException("Error: no se encontro un usuario con ese nombre.");
+                    throw new RuntimeException("Error: no se encontró un usuario con ese nombre.");
                 }
-                if (!ComponentesGUI.confirmar(this, "Seguro que desea eliminar a " + nombre + "?")) {
+                if (!ComponentesGUI.confirmar(this, "¿Seguro que desea eliminar a " + nombre + "?")) {
                     return;
                 }
                 ControllerUsuario.eliminarUsuario(nombre);
 
             } else {
-                ComponentesGUI.aviso(this, "Escriba un Id o un nombre.");
+                ComponentesGUI.aviso(this, "Escriba un ID o un nombre.");
                 return;
             }
 
@@ -62,7 +62,7 @@ public class GUIEliminarUsuario extends JFrame {
             nombreTexto.setText("");
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
