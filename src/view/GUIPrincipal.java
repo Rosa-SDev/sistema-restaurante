@@ -301,7 +301,7 @@ public class GUIPrincipal extends JFrame {
         salir.addActionListener(e -> confirmarSalida());
 
         autores.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Rosa - Sebastian - Daniel - Danielito\n\nv.0.1",
+                "Rosa Peña · Sebastián Gallego · Daniel Guzmán · Daniel Vanegas\n\nv.0.1",
                 "Autores",
                 JOptionPane.INFORMATION_MESSAGE));
 
