@@ -20,13 +20,13 @@ public class GUIActualizarPlatillo extends JFrame {
         idTexto = ComponentesGUI.campoTexto();
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:"},
+                new String[]{"ID:"},
                 new JComponent[]{idTexto});
 
         JButton cargarBTN = new JButton("Cargar datos");
         cargarBTN.addActionListener(e -> cargar());
 
-        add(ComponentesGUI.titulo("Ingrese el Id del platillo que desea actualizar"), BorderLayout.NORTH);
+        add(ComponentesGUI.titulo("Ingrese el ID del platillo que desea actualizar"), BorderLayout.NORTH);
         add(formulario, BorderLayout.CENTER);
         add(ComponentesGUI.panelBotones(cargarBTN), BorderLayout.SOUTH);
     }
@@ -36,7 +36,7 @@ public class GUIActualizarPlatillo extends JFrame {
             Platillo platillo = ControllerPlatillo.buscarPlatillo(Integer.parseInt(idTexto.getText().trim()));
 
             if (platillo == null) {
-                ComponentesGUI.aviso(this, "No se encontro un platillo con ese ID.");
+                ComponentesGUI.aviso(this, "No se encontró un platillo con ese ID.");
                 return;
             }
 
@@ -46,7 +46,7 @@ public class GUIActualizarPlatillo extends JFrame {
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id debe ser un numero entero.");
+            ComponentesGUI.error(this, "El ID debe ser un número entero.");
         }
     }
 }
