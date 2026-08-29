@@ -140,7 +140,7 @@ public class GUIGestionarPedido extends JFrame implements IActualizable {
         filas = pedido != null ? pedido.getPlatillos() : new ArrayList<>();
         tabla.setModel(new AdaptadorTablaModelo<>(filas, List.of(
                 col("Platillo", Platillo::getNombre),
-                col("Categoria", Platillo::getCategoria),
+                col("Categoría", Platillo::getCategoria),
                 col("Precio", pl -> ComponentesGUI.moneda(pl.getPrecio())))));
 
         if (pedido == null) {
@@ -162,7 +162,7 @@ public class GUIGestionarPedido extends JFrame implements IActualizable {
             cantidadTexto.setText("1");
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "La cantidad debe ser un numero entero.");
+            ComponentesGUI.error(this, "La cantidad debe ser un número entero.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
@@ -185,8 +185,8 @@ public class GUIGestionarPedido extends JFrame implements IActualizable {
     private void cancelarPedido() {
         try {
             Pedido pedido = seleccionado();
-            if (!ComponentesGUI.confirmar(this, "Cancelar el pedido #" + pedido.getId()
-                    + "? La mesa quedara libre.")) {
+            if (!ComponentesGUI.confirmar(this, "¿Cancelar el pedido #" + pedido.getId()
+                    + "? La mesa quedará libre.")) {
                 return;
             }
             ControllerPedido.cancelarPedido(pedido);
