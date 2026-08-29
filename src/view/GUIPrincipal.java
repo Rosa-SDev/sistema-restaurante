@@ -21,10 +21,6 @@ import java.util.function.Supplier;
  * se registraria como observador desde el primer segundo y la aplicacion abriria
  * dos docenas de JFrame invisibles.
  *
- * El menu Reservas es la unica excepcion: sus opciones se ven pero estan
- * deshabilitadas porque todavia no existen las ventanas de reservas.
- * ControllerReserva si esta, asi que es un pendiente de vista, no de logica.
- *
  * Que opciones quedan habilitadas depende del rol del usuario conectado, que se
  * lee de Sesion.getActual(). Lo resuelve aplicarPermisos().
  *
@@ -116,8 +112,11 @@ public class GUIPrincipal extends JFrame {
                 item("Listar pedidos", GUIListarPedidos::new),
                 item("Listar facturas", GUIListarFacturas::new));
 
-        menuReservas = menuPendiente("Reservas", "Registrar reserva", "Confirmar / cancelar",
-                "Buscar reserva", "Listar reservas");
+        menuReservas = menu("Reservas",
+                item("Registrar reserva", GUIRegistrarReserva::new),
+                item("Gestionar reserva", GUIGestionarReserva::new),
+                item("Buscar reserva", GUIBuscarReserva::new),
+                item("Listar reservas", GUIListarReservas::new));
 
         menuOperaciones = menu("Operaciones",
                 item("Calculos", GUICalculos::new));
@@ -153,16 +152,6 @@ public class GUIPrincipal extends JFrame {
         JMenu menu = new JMenu(titulo);
         agregarItems(menu, items);
         return menu;
-    }
-
-    /** Menu cuyas opciones ya se ven, pero todavia no tienen ventana que abrir. */
-    private JMenu menuPendiente(String titulo, String... textos) {
-        JMenuItem[] items = new JMenuItem[textos.length];
-        for (int i = 0; i < textos.length; i++) {
-            items[i] = new JMenuItem(textos[i]);
-            items[i].setEnabled(false);
-        }
-        return menu(titulo, items);
     }
 
     /**
@@ -221,8 +210,6 @@ public class GUIPrincipal extends JFrame {
      * Se parte de todo apagado y se enciende lo justo. Si algun dia entra un rol
      * nuevo y nadie le escribe sus permisos, no vera nada: es un fallo visible.
      * Al reves, un rol sin permisos escritos lo veria todo.
-     *
-     * Reservas no lo enciende ningun rol: todavia no tiene ventanas que abrir.
      */
     private void aplicarPermisos() {
         deshabilitarTodo();
@@ -238,6 +225,7 @@ public class GUIPrincipal extends JFrame {
             habilitar(menuMesas);
             habilitar(menuCarta);
             habilitar(menuPedidos);
+            habilitar(menuReservas);
             habilitar(menuOperaciones);
 
         } else if (usuario instanceof Mesero) {
@@ -246,6 +234,8 @@ public class GUIPrincipal extends JFrame {
             habilitar(menuCarta, "Listar carta");
             habilitar(menuPedidos, "Crear pedido", "Gestionar pedido",
                     "Buscar pedido", "Listar pedidos");
+            // la reserva lleva un mesero asignado, por eso el rol entra completo
+            habilitar(menuReservas);
 
         } else if (usuario instanceof Cocinero) {
             habilitar(menuCarta, "Listar carta");
