@@ -26,7 +26,7 @@ public class GUICalculos extends JFrame {
     private JTextArea reporte;
 
     public GUICalculos() {
-        ComponentesGUI.configurar(this, "Calculos y reportes", 620, 560);
+        ComponentesGUI.configurar(this, "Cálculos y reportes", 620, 560);
 
         idTexto = ComponentesGUI.campoTexto();
         nombreTexto = ComponentesGUI.campoTexto();
@@ -34,7 +34,7 @@ public class GUICalculos extends JFrame {
         porcentajeTexto.setText("10");
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id del platillo:", "o Nombre del platillo:", "Descuento (%):"},
+                new String[]{"ID del platillo:", "o Nombre del platillo:", "Descuento (%):"},
                 new JComponent[]{idTexto, nombreTexto, porcentajeTexto});
 
         JButton descuentoBTN = new JButton("Aplicar descuento");
@@ -92,7 +92,7 @@ public class GUICalculos extends JFrame {
             calcularTotales();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id y el porcentaje deben ser numeros validos.");
+            ComponentesGUI.error(this, "El ID y el porcentaje deben ser números válidos.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
@@ -104,7 +104,7 @@ public class GUICalculos extends JFrame {
             Platillo platillo = ControllerPlatillo.buscarPlatillo(
                     Integer.parseInt(idTexto.getText().trim()));
             if (platillo == null) {
-                ComponentesGUI.aviso(this, "No se encontro un platillo con ese Id.");
+                ComponentesGUI.aviso(this, "No se encontró un platillo con ese ID.");
             }
             return platillo;
         }
@@ -113,13 +113,13 @@ public class GUICalculos extends JFrame {
             java.util.List<Platillo> encontrados =
                     ControllerPlatillo.buscarPlatillo(nombreTexto.getText().trim());
             if (encontrados.isEmpty()) {
-                ComponentesGUI.aviso(this, "No se encontro un platillo con ese nombre.");
+                ComponentesGUI.aviso(this, "No se encontró un platillo con ese nombre.");
                 return null;
             }
             return encontrados.get(0);
         }
 
-        ComponentesGUI.aviso(this, "Escriba el Id o el nombre del platillo.");
+        ComponentesGUI.aviso(this, "Escriba el ID o el nombre del platillo.");
         return null;
     }
 
@@ -128,7 +128,7 @@ public class GUICalculos extends JFrame {
         texto.append("REPORTE DEL RESTAURANTE\n");
         texto.append("=".repeat(50)).append("\n\n");
 
-        texto.append("FACTURACION\n");
+        texto.append("FACTURACIÓN\n");
         texto.append(linea("Total facturado (sin anuladas)", ComponentesGUI.moneda(ControllerFactura.calcularTotalFacturado())));
         texto.append(linea("Facturas emitidas", String.valueOf(ControllerFactura.listarFacturas().size())));
         texto.append(linea("Facturas anuladas", String.valueOf(ControllerFactura.contarAnuladas())));
@@ -147,7 +147,7 @@ public class GUICalculos extends JFrame {
         texto.append(linea("Precio promedio", ComponentesGUI.moneda(ControllerPlatillo.calcularPrecioPromedio())));
         texto.append("\n");
 
-        texto.append("SALON\n");
+        texto.append("SALÓN\n");
         texto.append(linea("Mesas totales", String.valueOf(ControllerMesa.listarMesas().size())));
         texto.append(linea("Libres", String.valueOf(mesasEn(EstadoMesa.LIBRE))));
         texto.append(linea("Ocupadas", String.valueOf(mesasEn(EstadoMesa.OCUPADA))));
