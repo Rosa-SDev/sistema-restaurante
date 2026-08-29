@@ -128,9 +128,9 @@ deshabilitado y se enciende solo lo que corresponde.
 | Integrante | Responsabilidad principal |
 |---|---|
 | Rosa Isabel Peña Yagüe | Modelo del flujo de pedido, facturación e integración |
-| Juan Sebastián Gallego Villamil | Jerarquía de usuarios, clases técnicas y vistas de reservas |
-| Daniel Esteban Guzmán Rodríguez | Componentes de vista, patrón Adapter y autenticación |
-| Daniel Felipe Vanegas Restrepo | Controladores y vistas de clientes y carta |
+| Juan Sebastián Gallego Villamil | Jerarquía de usuarios, clases técnicas y vistas de usuarios y reservas |
+| Daniel Esteban Guzmán Rodríguez | Controladores base y vistas de clientes y carta |
+| Daniel Felipe Vanegas Restrepo | Componentes de vista, patrón Adapter, autenticación y vistas de pedidos |
 
 ## Flujo de ramas
 
