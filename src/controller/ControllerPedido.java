@@ -49,7 +49,7 @@ public class ControllerPedido {
         }
         if (pedido.getMesa().getEstado() == EstadoMesa.OCUPADA) {
             throw new RuntimeException("Error: la mesa " + pedido.getMesa().getNumero()
-                    + " ya esta ocupada por otro pedido.");
+                    + " ya está ocupada por otro pedido.");
         }
         pedidos.add(pedido);
         pedido.getMesa().ocupar();
@@ -147,7 +147,7 @@ public class ControllerPedido {
             throw new RuntimeException("Error: no se puede cerrar un pedido cancelado.");
         }
         if (pedido.getEstado() == EstadoPedido.PAGADO) {
-            throw new RuntimeException("Error: el pedido ya esta cerrado.");
+            throw new RuntimeException("Error: el pedido ya está cerrado.");
         }
         if (!pedido.estaPagado()) {
             throw new RuntimeException("Error: no se puede cerrar el pedido sin un pago registrado.");
@@ -164,7 +164,7 @@ public class ControllerPedido {
             throw new RuntimeException("Error: no se puede cancelar un pedido ya pagado.");
         }
         if (pedido.getEstado() == EstadoPedido.CANCELADO) {
-            throw new RuntimeException("Error: el pedido ya esta cancelado.");
+            throw new RuntimeException("Error: el pedido ya está cancelado.");
         }
         pedido.cancelar();
         actualizar();

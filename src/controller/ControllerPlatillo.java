@@ -100,7 +100,7 @@ public class ControllerPlatillo {
                 return;
             }
         }
-        throw new RuntimeException("Error: no se encontro un platillo con ese ID.");
+        throw new RuntimeException("Error: no se encontró un platillo con ese ID.");
     }
 
     public static void eliminarPlatillo(String nombre) {
@@ -122,7 +122,7 @@ public class ControllerPlatillo {
             throw new RuntimeException("Error: el nombre del platillo es obligatorio.");
         }
         if (platillo.getCategoria() == null || platillo.getCategoria().isBlank()) {
-            throw new RuntimeException("Error: la categoria del platillo es obligatoria.");
+            throw new RuntimeException("Error: la categoría del platillo es obligatoria.");
         }
         if (platillo.getPrecio() == null || platillo.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Error: el precio del platillo debe ser mayor que cero.");

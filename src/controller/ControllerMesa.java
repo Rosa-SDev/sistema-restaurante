@@ -17,7 +17,7 @@ public class ControllerMesa {
             throw new RuntimeException("Error: mesa nula.");
         }
         if (mesa.getNumero() <= 0) {
-            throw new RuntimeException("Error: el numero de la mesa debe ser mayor que cero.");
+            throw new RuntimeException("Error: el número de la mesa debe ser mayor que cero.");
         }
         if (mesa.getCapacidad() <= 0) {
             throw new RuntimeException("Error: la capacidad de la mesa debe ser mayor que cero.");
@@ -29,7 +29,7 @@ public class ControllerMesa {
             throw new RuntimeException("Error: ya existe una mesa con ese ID.");
         }
         if (existeNumero(mesa.getNumero())) {
-            throw new RuntimeException("Error: ya existe una mesa con ese numero.");
+            throw new RuntimeException("Error: ya existe una mesa con ese número.");
         }
         mesas.add(mesa);
         actualizar();
@@ -82,7 +82,7 @@ public class ControllerMesa {
                 || mesaActualizada.getNumero() <= 0
                 || mesaActualizada.getCapacidad() <= 0
                 || mesaActualizada.getEstado() == null) {
-            throw new RuntimeException("Error: campos invalidos para la mesa.");
+            throw new RuntimeException("Error: campos inválidos para la mesa.");
         }
         for (int i = 0; i < mesas.size(); i++) {
             if (mesas.get(i).getId() == mesaActualizada.getId()) {
@@ -105,7 +105,7 @@ public class ControllerMesa {
                 return;
             }
         }
-        throw new RuntimeException("Error: no se encontro una mesa con ese ID.");
+        throw new RuntimeException("Error: no se encontró una mesa con ese ID.");
     }
 
     private static boolean existeId(int id) {

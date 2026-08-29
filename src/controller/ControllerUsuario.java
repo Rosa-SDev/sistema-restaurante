@@ -88,7 +88,7 @@ public class ControllerUsuario {
         if (usuarioActualizado == null
                 || usuarioActualizado.getNombre() == null || usuarioActualizado.getNombre().isBlank()
                 || usuarioActualizado.getCorreo() == null || usuarioActualizado.getCorreo().isBlank()) {
-            throw new RuntimeException("Error: campos invalidos para el usuario.");
+            throw new RuntimeException("Error: campos inválidos para el usuario.");
         }
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getId() == usuarioActualizado.getId()) {
@@ -108,7 +108,7 @@ public class ControllerUsuario {
                 return;
             }
         }
-        throw new RuntimeException("Error: no se encontro un usuario con ese ID.");
+        throw new RuntimeException("Error: no se encontró un usuario con ese ID.");
     }
 
     public static void eliminarUsuario(String nombre) {
