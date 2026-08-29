@@ -11,7 +11,8 @@ import java.awt.event.WindowEvent;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Permite confirmar o cancelar una reserva seleccionandola de un combo.
+ * Permite confirmar, dar por cumplida o cancelar una reserva seleccionandola de
+ * un combo.
  * Implementa IActualizable para refrescarse cuando otra ventana cambia datos.
  */
 public class GUIGestionarReserva extends JFrame implements IActualizable {
@@ -22,7 +23,7 @@ public class GUIGestionarReserva extends JFrame implements IActualizable {
     private JLabel detalle;
 
     public GUIGestionarReserva() {
-        ComponentesGUI.configurar(this, "Confirmar o cancelar reserva", 560, 320);
+        ComponentesGUI.configurar(this, "Gestionar reserva", 560, 320);
         setResizable(false);
 
         reservaCombo = new JComboBox<>();
@@ -42,6 +43,8 @@ public class GUIGestionarReserva extends JFrame implements IActualizable {
 
         JButton confirmarBTN = new JButton("Confirmar");
         confirmarBTN.addActionListener(e -> confirmar());
+        JButton cumplidaBTN = new JButton("Marcar cumplida");
+        cumplidaBTN.addActionListener(e -> marcarCumplida());
         JButton cancelarBTN = new JButton("Cancelar reserva");
         cancelarBTN.addActionListener(e -> cancelar());
 
@@ -50,9 +53,9 @@ public class GUIGestionarReserva extends JFrame implements IActualizable {
         centro.add(formulario, BorderLayout.NORTH);
         centro.add(detalle, BorderLayout.CENTER);
 
-        add(ComponentesGUI.titulo("Confirmar o cancelar reserva"), BorderLayout.NORTH);
+        add(ComponentesGUI.titulo("Gestionar reserva"), BorderLayout.NORTH);
         add(centro, BorderLayout.CENTER);
-        add(ComponentesGUI.panelBotones(confirmarBTN, cancelarBTN), BorderLayout.SOUTH);
+        add(ComponentesGUI.panelBotones(confirmarBTN, cumplidaBTN, cancelarBTN), BorderLayout.SOUTH);
 
         cargarReservas();
         ControllerReserva.addActualizable(this);
@@ -98,6 +101,24 @@ public class GUIGestionarReserva extends JFrame implements IActualizable {
             ControllerReserva.confirmarReserva(reserva);
             ComponentesGUI.exito(this, "Reserva confirmada. La mesa " + reserva.getMesa().getNumero()
                     + " quedo RESERVADA.");
+        } catch (RuntimeException ex) {
+            ComponentesGUI.error(this, ex.getMessage());
+        }
+    }
+
+    /**
+     * Da la reserva por cumplida: el cliente llego.
+     *
+     * La mesa se queda en RESERVADA, no pasa a OCUPADA: es el estado desde el que
+     * ControllerPedido.crearPedido() acepta abrirle la cuenta.
+     */
+    private void marcarCumplida() {
+        try {
+            Reserva reserva = seleccionada();
+            ControllerReserva.marcarCumplida(reserva);
+            ComponentesGUI.exito(this, "Reserva cumplida. La mesa "
+                    + reserva.getMesa().getNumero() + " sigue RESERVADA y ya se le puede "
+                    + "abrir el pedido.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
