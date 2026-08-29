@@ -66,7 +66,7 @@ public class Main {
 
     private static void cargarClientes() {
         ControllerCliente.agregarCliente(new Cliente(1, "Pedro Gil", "1077111", "3101112233"));
-        ControllerCliente.agregarCliente(new Cliente(2, "Sofia Ramos", "1077222", "3102223344"));
+        ControllerCliente.agregarCliente(new Cliente(2, "Sofía Ramos", "1077222", "3102223344"));
     }
 
     /** Una mesa reservada, para que se vean los tres estados desde el arranque. */
@@ -83,14 +83,14 @@ public class Main {
                 "Entradas", new BigDecimal("12000"), true));
         ControllerPlatillo.agregarPlatillo(new Platillo(2, "Patacones", "Con hogao",
                 "Entradas", new BigDecimal("15000"), true));
-        ControllerPlatillo.agregarPlatillo(new Platillo(3, "Sancocho de gallina", "Plato tipico",
+        ControllerPlatillo.agregarPlatillo(new Platillo(3, "Sancocho de gallina", "Plato típico",
                 "Platos fuertes", new BigDecimal("28000"), true));
-        ControllerPlatillo.agregarPlatillo(new Platillo(4, "Bandeja paisa", "Plato tipico",
+        ControllerPlatillo.agregarPlatillo(new Platillo(4, "Bandeja paisa", "Plato típico",
                 "Platos fuertes", new BigDecimal("32000"), true));
         ControllerPlatillo.agregarPlatillo(new Platillo(5, "Limonada de coco", "Vaso de 350 ml",
                 "Bebidas", new BigDecimal("9000"), true));
         // Uno agotado, para poder ensenar que el controlador lo rechaza en un pedido
-        ControllerPlatillo.agregarPlatillo(new Platillo(6, "Mojarra frita", "Con patacon",
+        ControllerPlatillo.agregarPlatillo(new Platillo(6, "Mojarra frita", "Con patacón",
                 "Platos fuertes", new BigDecimal("35000"), false));
     }
 }
