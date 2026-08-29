@@ -55,7 +55,7 @@ public class GUIRegistrarReserva extends JFrame {
         fechaHoraSpinner.setBorder(EstilosGUI.GRAY_BORDER);
 
         JPanel formulario = ComponentesGUI.formulario(
-                new String[]{"Id:", "Cliente:", "Mesa:", "Mesero:", "Fecha y hora:", "Num. personas:"},
+                new String[]{"ID:", "Cliente:", "Mesa:", "Mesero:", "Fecha y hora:", "Núm. personas:"},
                 new JComponent[]{idTexto, clienteCombo, mesaCombo, meseroCombo,
                         fechaHoraSpinner, numPersonasTexto});
 
@@ -100,7 +100,7 @@ public class GUIRegistrarReserva extends JFrame {
             dispose();
 
         } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El Id y el numero de personas deben ser numeros enteros.");
+            ComponentesGUI.error(this, "El ID y el número de personas deben ser números enteros.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
