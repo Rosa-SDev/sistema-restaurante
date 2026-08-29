@@ -1,6 +1,11 @@
 package view;
 
+import model.Administrador;
+import model.Cajero;
+import model.Cocinero;
+import model.Mesero;
 import model.Restaurante;
+import model.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +25,8 @@ import java.util.function.Supplier;
  * deshabilitadas porque todavia no existen las ventanas de reservas.
  * ControllerReserva si esta, asi que es un pendiente de vista, no de logica.
  *
- * El filtrado de estas opciones segun el rol del usuario conectado se hace
- * aparte, a partir de Sesion.getActual().
+ * Que opciones quedan habilitadas depende del rol del usuario conectado, que se
+ * lee de Sesion.getActual(). Lo resuelve aplicarPermisos().
  *
  * Limitacion conocida: las ventanas ya abiertas sobreviven al cierre de sesion,
  * porque son JFrame independientes y no ventanas hijas de esta.
@@ -58,6 +63,7 @@ public class GUIPrincipal extends JFrame {
         crearMenu();
         crearPanelInformacion();
         activarOpciones();
+        aplicarPermisos();
     }
 
     private void crearMenu() {
@@ -175,9 +181,10 @@ public class GUIPrincipal extends JFrame {
     private void crearPanelInformacion() {
         Restaurante restaurante = Restaurante.getInstancia();
 
-        JPanel panelDatos = new JPanel(new GridLayout(4, 1, 0, 10));
+        JPanel panelDatos = new JPanel(new GridLayout(5, 1, 0, 10));
         panelDatos.setBackground(EstilosGUI.COLOR_CLARO);
         panelDatos.setBorder(BorderFactory.createEmptyBorder(20, 60, 40, 60));
+        panelDatos.add(etiqueta(textoConectado()));
         panelDatos.add(etiqueta("NIT: " + restaurante.getNit()));
         panelDatos.add(etiqueta("Fundacion: " + restaurante.getFechaFundacion()));
         panelDatos.add(etiqueta("Direccion: " + restaurante.getDireccion()));
@@ -191,6 +198,111 @@ public class GUIPrincipal extends JFrame {
         JLabel label = new JLabel(texto);
         label.setHorizontalAlignment(JLabel.CENTER);
         return label;
+    }
+
+    /**
+     * Quien esta conectado y con que rol.
+     *
+     * El rol es el nombre de la clase del usuario: los cuatro roles no tienen
+     * atributos propios, lo unico que los distingue es el tipo.
+     */
+    private String textoConectado() {
+        Usuario usuario = Sesion.getActual();
+        if (usuario == null) {
+            return "Sin sesion iniciada";
+        }
+        return "Conectado: " + usuario.getNombre()
+                + " (" + usuario.getClass().getSimpleName() + ")";
+    }
+
+    /**
+     * Habilita los menus que le tocan al rol conectado.
+     *
+     * Se parte de todo apagado y se enciende lo justo. Si algun dia entra un rol
+     * nuevo y nadie le escribe sus permisos, no vera nada: es un fallo visible.
+     * Al reves, un rol sin permisos escritos lo veria todo.
+     *
+     * Reservas no lo enciende ningun rol: todavia no tiene ventanas que abrir.
+     */
+    private void aplicarPermisos() {
+        deshabilitarTodo();
+
+        Usuario usuario = Sesion.getActual();
+        if (usuario == null) {
+            return;
+        }
+
+        if (usuario instanceof Administrador) {
+            habilitar(menuUsuarios);
+            habilitar(menuClientes);
+            habilitar(menuMesas);
+            habilitar(menuCarta);
+            habilitar(menuPedidos);
+            habilitar(menuOperaciones);
+
+        } else if (usuario instanceof Mesero) {
+            habilitar(menuClientes);
+            habilitar(menuMesas, "Buscar", "Listar");
+            habilitar(menuCarta, "Listar carta");
+            habilitar(menuPedidos, "Crear pedido", "Gestionar pedido",
+                    "Buscar pedido", "Listar pedidos");
+
+        } else if (usuario instanceof Cocinero) {
+            habilitar(menuCarta, "Listar carta");
+            habilitar(menuPedidos, "Buscar pedido", "Listar pedidos");
+
+        } else if (usuario instanceof Cajero) {
+            habilitar(menuClientes, "Buscar", "Listar");
+            habilitar(menuCarta, "Listar carta");
+            habilitar(menuPedidos, "Facturar pedido", "Buscar pedido",
+                    "Listar pedidos", "Listar facturas");
+            habilitar(menuOperaciones);
+        }
+    }
+
+    private void deshabilitarTodo() {
+        JMenu[] menus = {menuUsuarios, menuClientes, menuMesas, menuCarta,
+                menuPedidos, menuReservas, menuOperaciones};
+        for (JMenu menu : menus) {
+            menu.setEnabled(false);
+        }
+    }
+
+    /** Enciende el menu entero: el titulo y todas sus opciones. */
+    private void habilitar(JMenu menu) {
+        menu.setEnabled(true);
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            if (menu.getItem(i) != null) {
+                menu.getItem(i).setEnabled(true);
+            }
+        }
+    }
+
+    /**
+     * Enciende el menu y solo las opciones nombradas.
+     *
+     * Los permisos se escriben con el texto del item ("Listar carta"). Si alguien
+     * renombra una opcion hay que cambiarla tambien aqui, o ese permiso deja de
+     * aplicarse sin avisar.
+     */
+    private void habilitar(JMenu menu, String... textos) {
+        menu.setEnabled(true);
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            JMenuItem item = menu.getItem(i);
+            // getItem() devuelve null en los separadores
+            if (item != null) {
+                item.setEnabled(contiene(textos, item.getText()));
+            }
+        }
+    }
+
+    private boolean contiene(String[] textos, String texto) {
+        for (String candidato : textos) {
+            if (candidato.equals(texto)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void activarOpciones() {
