@@ -27,42 +27,8 @@ Reglas de capa:
 - `view` no manipula listas de dominio: siempre pasa por un controlador.
 - `controller` no construye ventanas.
 
-## Clases
-
-### `model`
-
-| Grupo | Clases |
-|---|---|
-| Usuarios | `Usuario`, `Administrador`, `Mesero`, `Cocinero`, `Cajero` |
-| Dominio | `Cliente`, `Mesa`, `Platillo`, `Pedido`, `Factura`, `Reserva` |
-| Enumeraciones | `EstadoMesa`, `EstadoPedido`, `EstadoReserva`, `MetodoPago` |
-| Interfaces | `IActualizable`, `IDescontable` |
-| Técnica | `Restaurante` |
-
 El dinero es siempre `BigDecimal`. `Pedido.calcularTotal()` suma los platillos sin
-impuestos; `Factura.emitir()` aplica el impuesto al consumo y congela el total.
-
-### `controller`
-
-`ControllerUsuario`, `ControllerCliente`, `ControllerMesa`, `ControllerPlatillo`,
-`ControllerPedido`, `ControllerFactura`, `ControllerReserva`.
-
-Cada uno mantiene su lista estática, valida las entradas lanzando
-`RuntimeException` con mensaje en español, y hace de sujeto del Observer.
-
-### `view`
-
-| Grupo | Clases |
-|---|---|
-| Arranque | `GUILogin`, `GUIPrincipal`, `Sesion` |
-| Compartidas | `ComponentesGUI`, `EstilosGUI`, `AdaptadorTablaModelo`, `Columna` |
-| Usuarios | `GUIAgregarUsuario`, `GUIActualizarUsuario`, `GUIEliminarUsuario`, `GUIBuscarUsuario`, `GUIListarUsuarios` |
-| Clientes | `GUIAgregarCliente`, `GUIActualizarCliente`, `GUIEliminarCliente`, `GUIBuscarCliente`, `GUIListarClientes` |
-| Mesas | `GUIAgregarMesa`, `GUIActualizarMesa`, `GUIEliminarMesa`, `GUIBuscarMesa`, `GUIListarMesas` |
-| Carta | `GUIAgregarPlatillo`, `GUIActualizarPlatillo`, `GUIEliminarPlatillo`, `GUIBuscarPlatillo`, `GUIListarPlatillos` |
-| Pedidos | `GUICrearPedido`, `GUIGestionarPedido`, `GUIFacturarPedido`, `GUIBuscarPedido`, `GUIListarPedidos`, `GUIListarFacturas` |
-| Reservas | `GUIRegistrarReserva`, `GUIGestionarReserva`, `GUIBuscarReserva`, `GUIListarReservas` |
-| Operaciones | `GUICalculos` |
+impuestos y `Factura.emitir()` aplica el impuesto al consumo y congela el total.
 
 ## Patrones de diseño
 
@@ -71,7 +37,6 @@ Cada uno mantiene su lista estática, valida las entradas lanzando
 | Singleton | `Restaurante.getInstancia()` |
 | Observer | `IActualizable` + los controladores como sujeto; las ventanas de listado como observadoras |
 | Adapter | `AdaptadorTablaModelo<T>` adapta `List<T>` del dominio al `TableModel` que Swing exige |
-| MVC | Los tres paquetes |
 
 ## Cómo ejecutar
 
@@ -90,11 +55,9 @@ javac -encoding UTF-8 -d bin (Get-ChildItem -Recurse -Filter *.java src).FullNam
 java -cp bin Main
 ```
 
-El proyecto declara la codificación UTF-8 en `.editorconfig`, que IntelliJ, VS Code
-y Cursor respetan al guardar. Al compilar, desde JDK 18 (JEP 400) `javac` ya usa
-UTF-8 por defecto y este proyecto apunta a openjdk-25, pero `-encoding UTF-8` sigue
-siendo obligatorio para quien compile con JDK 17 o anterior: sin él las tildes de
-la interfaz se corrompen.
+El proyecto fija UTF-8 en `.editorconfig`. Desde JDK 18 `javac` ya usa UTF-8 por
+defecto, pero `-encoding UTF-8` sigue siendo obligatorio con JDK 17 o anterior:
+sin él, las tildes de la interfaz se corrompen.
 
 ## Datos de demostración
 
