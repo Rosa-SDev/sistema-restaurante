@@ -6,6 +6,7 @@ import model.IActualizable;
 import model.Reserva;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,11 @@ public class ControllerReserva {
         if (reserva.getFechaHora() == null) {
             throw new RuntimeException("Error: la reserva necesita una fecha.");
         }
-        if (reserva.getFechaHora().isBefore(LocalDateTime.now())) {
+        // Se compara por minutos, no por segundos: el formulario solo muestra
+        // "dd/MM/yyyy HH:mm", asi que un rechazo por medio minuto seria invisible
+        // para quien lo sufre.
+        if (reserva.getFechaHora().truncatedTo(ChronoUnit.MINUTES)
+                .isBefore(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))) {
             throw new RuntimeException("Error: no se puede reservar para una fecha que ya pasó.");
         }
         if (reserva.getNumPersonas() <= 0) {

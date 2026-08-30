@@ -50,7 +50,13 @@ public class GUIRegistrarReserva extends JFrame {
             meseroCombo.addItem(mesero);
         }
 
+        // Arranca una hora por delante: una reserva se toma para mas tarde, y con
+        // "ahora" por defecto el propio instante de abrir la ventana ya seria
+        // pasado al pulsar Registrar. El modelo se deja sin minimo a proposito,
+        // para poder bajar a una fecha pasada y provocar el rechazo.
         fechaHoraSpinner = new JSpinner(new SpinnerDateModel());
+        fechaHoraSpinner.setValue(Date.from(LocalDateTime.now().plusHours(1)
+                .atZone(ZoneId.systemDefault()).toInstant()));
         fechaHoraSpinner.setEditor(new JSpinner.DateEditor(fechaHoraSpinner, "dd/MM/yyyy HH:mm"));
         fechaHoraSpinner.setBorder(EstilosGUI.GRAY_BORDER);
 
