@@ -24,8 +24,14 @@ public class ControllerUsuario {
         if (usuario.getCorreo() == null || usuario.getCorreo().isBlank()) {
             throw new RuntimeException("Error: el correo del usuario es obligatorio.");
         }
+        if (!correoValido(usuario.getCorreo())) {
+            throw new RuntimeException("Error: el correo del usuario no tiene un formato válido.");
+        }
         if (existeId(usuario.getId())) {
             throw new RuntimeException("Error: ya existe un usuario con ese ID.");
+        }
+        if (existeCorreo(usuario.getCorreo())) {
+            throw new RuntimeException("Error: ya existe un usuario con ese correo.");
         }
         usuarios.add(usuario);
         actualizar();
@@ -90,6 +96,12 @@ public class ControllerUsuario {
                 || usuarioActualizado.getCorreo() == null || usuarioActualizado.getCorreo().isBlank()) {
             throw new RuntimeException("Error: campos inválidos para el usuario.");
         }
+        if (!correoValido(usuarioActualizado.getCorreo())) {
+            throw new RuntimeException("Error: el correo del usuario no tiene un formato válido.");
+        }
+        if (existeCorreoEnOtro(usuarioActualizado.getCorreo(), usuarioActualizado.getId())) {
+            throw new RuntimeException("Error: ya existe otro usuario con ese correo.");
+        }
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getId() == usuarioActualizado.getId()) {
                 usuarios.set(i, usuarioActualizado);
@@ -129,6 +141,54 @@ public class ControllerUsuario {
     private static boolean existeId(int id) {
         for (Usuario usuario : usuarios) {
             if (usuario.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Comprobacion minima del correo: una sola arroba, con texto a cada lado, y
+     * un punto dentro del dominio que no lo abra ni lo cierre.
+     *
+     * No hay expresion regular a proposito. La sintaxis real de un correo no cabe
+     * en una, y las que circulan por internet rechazan correos validos. Estas
+     * cuatro condiciones se leen y se defienden una por una.
+     */
+    private static boolean correoValido(String correo) {
+        int arroba = correo.indexOf('@');
+        // una sola arroba: la primera tiene que ser tambien la ultima
+        if (arroba < 0 || arroba != correo.lastIndexOf('@')) {
+            return false;
+        }
+        String parteLocal = correo.substring(0, arroba);
+        String dominio = correo.substring(arroba + 1);
+        if (parteLocal.isBlank() || dominio.isBlank()) {
+            return false;
+        }
+        // ni ".com" ni "gmail.": el punto necesita texto a los dos lados
+        int punto = dominio.indexOf('.');
+        return punto > 0 && punto < dominio.length() - 1;
+    }
+
+    private static boolean existeCorreo(String correo) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getCorreo().equalsIgnoreCase(correo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Igual que existeCorreo, pero sin mirar al usuario con ese ID.
+     *
+     * Al actualizar, el usuario conserva su propio correo: sin esta exclusion
+     * chocaria consigo mismo y no se podria guardar ningun cambio.
+     */
+    private static boolean existeCorreoEnOtro(String correo, int idPropio) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId() != idPropio && usuario.getCorreo().equalsIgnoreCase(correo)) {
                 return true;
             }
         }

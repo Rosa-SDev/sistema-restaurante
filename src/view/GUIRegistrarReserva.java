@@ -50,7 +50,13 @@ public class GUIRegistrarReserva extends JFrame {
             meseroCombo.addItem(mesero);
         }
 
+        // Arranca una hora por delante: una reserva se toma para mas tarde, y con
+        // "ahora" por defecto el propio instante de abrir la ventana ya seria
+        // pasado al pulsar Registrar. El modelo se deja sin minimo a proposito,
+        // para poder bajar a una fecha pasada y provocar el rechazo.
         fechaHoraSpinner = new JSpinner(new SpinnerDateModel());
+        fechaHoraSpinner.setValue(Date.from(LocalDateTime.now().plusHours(1)
+                .atZone(ZoneId.systemDefault()).toInstant()));
         fechaHoraSpinner.setEditor(new JSpinner.DateEditor(fechaHoraSpinner, "dd/MM/yyyy HH:mm"));
         fechaHoraSpinner.setBorder(EstilosGUI.GRAY_BORDER);
 
@@ -83,13 +89,16 @@ public class GUIRegistrarReserva extends JFrame {
                 throw new RuntimeException("Error: debe seleccionar un mesero.");
             }
 
+            int id = enteroEnRango(idTexto, "el ID", 1, 999999);
+            int numPersonas = enteroEnRango(numPersonasTexto, "el número de personas", 1, 99);
+
             Date fecha = (Date) fechaHoraSpinner.getValue();
             LocalDateTime fechaHora = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
             Reserva reserva = new Reserva(
-                    Integer.parseInt(idTexto.getText().trim()),
+                    id,
                     fechaHora,
-                    Integer.parseInt(numPersonasTexto.getText().trim()),
+                    numPersonas,
                     cliente,
                     mesa,
                     mesero);
@@ -99,10 +108,29 @@ public class GUIRegistrarReserva extends JFrame {
                     + "Use 'Confirmar / cancelar' para cambiarla.");
             dispose();
 
-        } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El ID y el número de personas deben ser números enteros.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
+    }
+
+    /**
+     * Lee un campo como entero dentro de un rango.
+     *
+     * Un solo mensaje para los dos fallos —texto que no es un numero, y numero
+     * fuera del rango— porque para quien lo lee la correccion es la misma:
+     * escribir un numero entre esos dos.
+     */
+    private int enteroEnRango(JTextField campo, String nombre, int minimo, int maximo) {
+        String mensaje = "Error: " + nombre + " debe estar entre " + minimo + " y " + maximo + ".";
+        int valor;
+        try {
+            valor = Integer.parseInt(campo.getText().trim());
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException(mensaje);
+        }
+        if (valor < minimo || valor > maximo) {
+            throw new RuntimeException(mensaje);
+        }
+        return valor;
     }
 }
