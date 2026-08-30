@@ -83,13 +83,16 @@ public class GUIRegistrarReserva extends JFrame {
                 throw new RuntimeException("Error: debe seleccionar un mesero.");
             }
 
+            int id = entero(idTexto, "el ID");
+            int numPersonas = entero(numPersonasTexto, "el número de personas");
+
             Date fecha = (Date) fechaHoraSpinner.getValue();
             LocalDateTime fechaHora = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
             Reserva reserva = new Reserva(
-                    Integer.parseInt(idTexto.getText().trim()),
+                    id,
                     fechaHora,
-                    Integer.parseInt(numPersonasTexto.getText().trim()),
+                    numPersonas,
                     cliente,
                     mesa,
                     mesero);
@@ -99,10 +102,38 @@ public class GUIRegistrarReserva extends JFrame {
                     + "Use 'Confirmar / cancelar' para cambiarla.");
             dispose();
 
-        } catch (NumberFormatException ex) {
-            ComponentesGUI.error(this, "El ID y el número de personas deben ser números enteros.");
         } catch (RuntimeException ex) {
             ComponentesGUI.error(this, ex.getMessage());
         }
+    }
+
+    /**
+     * Lee un campo como entero, nombrando el campo que falla.
+     *
+     * Antes los dos campos se parseaban dentro del mismo try, asi que un unico
+     * catch acusaba a los dos a la vez y daba una razon que podia no ser la real.
+     */
+    private int entero(JTextField campo, String nombre) {
+        String texto = campo.getText().trim();
+        try {
+            return Integer.parseInt(texto);
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException("Error: " + nombre + " " + porQueNoEsEntero(texto));
+        }
+    }
+
+    /** Distingue el texto que no es un numero del numero que no cabe en un int. */
+    private String porQueNoEsEntero(String texto) {
+        String digitos = texto.startsWith("-") ? texto.substring(1) : texto;
+        boolean esNumero = !digitos.isEmpty();
+        for (int i = 0; i < digitos.length(); i++) {
+            if (!Character.isDigit(digitos.charAt(i))) {
+                esNumero = false;
+            }
+        }
+        if (esNumero) {
+            return "no cabe en un número entero: el máximo es " + Integer.MAX_VALUE + ".";
+        }
+        return "debe ser un número entero.";
     }
 }
