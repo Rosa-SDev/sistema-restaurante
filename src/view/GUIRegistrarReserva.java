@@ -90,7 +90,7 @@ public class GUIRegistrarReserva extends JFrame {
             }
 
             int id = entero(idTexto, "el ID");
-            int numPersonas = entero(numPersonasTexto, "el número de personas");
+            int numPersonas = enteroEnRango(numPersonasTexto, "el número de personas", 1, 99);
 
             Date fecha = (Date) fechaHoraSpinner.getValue();
             LocalDateTime fechaHora = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -126,6 +126,27 @@ public class GUIRegistrarReserva extends JFrame {
         } catch (NumberFormatException ex) {
             throw new RuntimeException("Error: " + nombre + " " + porQueNoEsEntero(texto));
         }
+    }
+
+    /**
+     * Lee un campo como entero dentro de un rango.
+     *
+     * Un solo mensaje para los dos fallos —texto que no es un numero, y numero
+     * fuera del rango— porque para quien lo lee la correccion es la misma:
+     * escribir un numero entre esos dos.
+     */
+    private int enteroEnRango(JTextField campo, String nombre, int minimo, int maximo) {
+        String mensaje = "Error: " + nombre + " debe estar entre " + minimo + " y " + maximo + ".";
+        int valor;
+        try {
+            valor = Integer.parseInt(campo.getText().trim());
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException(mensaje);
+        }
+        if (valor < minimo || valor > maximo) {
+            throw new RuntimeException(mensaje);
+        }
+        return valor;
     }
 
     /** Distingue el texto que no es un numero del numero que no cabe en un int. */
