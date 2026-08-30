@@ -5,6 +5,7 @@ import model.EstadoReserva;
 import model.IActualizable;
 import model.Reserva;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,12 @@ public class ControllerReserva {
         }
         if (reserva.getMesa() == null) {
             throw new RuntimeException("Error: la reserva necesita una mesa.");
+        }
+        if (reserva.getFechaHora() == null) {
+            throw new RuntimeException("Error: la reserva necesita una fecha.");
+        }
+        if (reserva.getFechaHora().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Error: no se puede reservar para una fecha que ya pasó.");
         }
         if (reserva.getNumPersonas() <= 0) {
             throw new RuntimeException("Error: el número de personas debe ser mayor que cero.");
