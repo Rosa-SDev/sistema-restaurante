@@ -41,7 +41,7 @@ public class GUIListarUsuarios extends JFrame implements IActualizable {
                 col("Nombre", Usuario::getNombre),
                 col("Correo", Usuario::getCorreo),
                 col("Rol", u -> u.getClass().getSimpleName()),
-                col("Activo", Usuario::isActivo));
+                col("Activo", u -> u.isActivo() ? "Sí" : "No"));
     }
 
     @Override
