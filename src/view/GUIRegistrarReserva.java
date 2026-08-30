@@ -89,7 +89,7 @@ public class GUIRegistrarReserva extends JFrame {
                 throw new RuntimeException("Error: debe seleccionar un mesero.");
             }
 
-            int id = entero(idTexto, "el ID");
+            int id = enteroEnRango(idTexto, "el ID", 1, 999999);
             int numPersonas = enteroEnRango(numPersonasTexto, "el número de personas", 1, 99);
 
             Date fecha = (Date) fechaHoraSpinner.getValue();
@@ -114,21 +114,6 @@ public class GUIRegistrarReserva extends JFrame {
     }
 
     /**
-     * Lee un campo como entero, nombrando el campo que falla.
-     *
-     * Antes los dos campos se parseaban dentro del mismo try, asi que un unico
-     * catch acusaba a los dos a la vez y daba una razon que podia no ser la real.
-     */
-    private int entero(JTextField campo, String nombre) {
-        String texto = campo.getText().trim();
-        try {
-            return Integer.parseInt(texto);
-        } catch (NumberFormatException ex) {
-            throw new RuntimeException("Error: " + nombre + " " + porQueNoEsEntero(texto));
-        }
-    }
-
-    /**
      * Lee un campo como entero dentro de un rango.
      *
      * Un solo mensaje para los dos fallos —texto que no es un numero, y numero
@@ -147,20 +132,5 @@ public class GUIRegistrarReserva extends JFrame {
             throw new RuntimeException(mensaje);
         }
         return valor;
-    }
-
-    /** Distingue el texto que no es un numero del numero que no cabe en un int. */
-    private String porQueNoEsEntero(String texto) {
-        String digitos = texto.startsWith("-") ? texto.substring(1) : texto;
-        boolean esNumero = !digitos.isEmpty();
-        for (int i = 0; i < digitos.length(); i++) {
-            if (!Character.isDigit(digitos.charAt(i))) {
-                esNumero = false;
-            }
-        }
-        if (esNumero) {
-            return "no cabe en un número entero: el máximo es " + Integer.MAX_VALUE + ".";
-        }
-        return "debe ser un número entero.";
     }
 }
