@@ -6,6 +6,7 @@
 *.md    text eol=lf
 *.xml   text eol=lf
 *.json  text eol=lf
+.editorconfig text eol=lf
 
 # Binarios: Git no los toca nunca
 *.pdf   binary
