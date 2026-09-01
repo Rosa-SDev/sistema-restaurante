@@ -54,6 +54,9 @@ public class ControllerPedido {
         pedidos.add(pedido);
         pedido.getMesa().ocupar();
         actualizar();
+        // La mesa acaba de cambiar de estado: sus observadores tambien tienen que
+        // enterarse, o un listado de mesas abierto se queda con el dato viejo en pantalla.
+        ControllerMesa.actualizar();
     }
 
     public static List<Pedido> listarPedidos() {
@@ -154,6 +157,8 @@ public class ControllerPedido {
         }
         pedido.cerrar();
         actualizar();
+        // cerrar() libera la mesa
+        ControllerMesa.actualizar();
     }
 
     public static void cancelarPedido(Pedido pedido) throws RuntimeException {
@@ -168,6 +173,8 @@ public class ControllerPedido {
         }
         pedido.cancelar();
         actualizar();
+        // cancelar() libera la mesa
+        ControllerMesa.actualizar();
     }
 
     private static boolean existeId(int id) {

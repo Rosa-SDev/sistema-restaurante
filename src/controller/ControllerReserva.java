@@ -83,6 +83,8 @@ public class ControllerReserva {
         }
         reserva.confirmar();
         actualizar();
+        // confirmar() deja la mesa RESERVADA
+        ControllerMesa.actualizar();
     }
 
     public static void cancelarReserva(Reserva reserva) throws RuntimeException {
@@ -95,6 +97,8 @@ public class ControllerReserva {
         }
         reserva.cancelar();
         actualizar();
+        // cancelar() libera la mesa
+        ControllerMesa.actualizar();
     }
 
     /**
