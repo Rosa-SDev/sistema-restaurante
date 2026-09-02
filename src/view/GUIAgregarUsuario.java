@@ -64,7 +64,7 @@ public class GUIAgregarUsuario extends JFrame {
                 existente.setCorreo(correo);
 
                 if (!password.isEmpty()) {
-                    existente.cambiarPassword(password);
+                    existente.cambiarPassword(ControllerUsuario.hash(password));
                 }
 
                 ControllerUsuario.actualizarUsuario(existente);
@@ -73,10 +73,10 @@ public class GUIAgregarUsuario extends JFrame {
             } else {
 
                 Usuario usuario = switch (rolCombo.getSelectedIndex()) {
-                    case 0 -> new Administrador(id, nombre, correo, password);
-                    case 1 -> new Mesero(id, nombre, correo, password);
-                    case 2 -> new Cocinero(id, nombre, correo, password);
-                    default -> new Cajero(id, nombre, correo, password);
+                    case 0 -> new Administrador(id, nombre, correo, ControllerUsuario.hash(password));
+                    case 1 -> new Mesero(id, nombre, correo, ControllerUsuario.hash(password));
+                    case 2 -> new Cocinero(id, nombre, correo, ControllerUsuario.hash(password));
+                    default -> new Cajero(id, nombre, correo, ControllerUsuario.hash(password));
                 };
 
                 ControllerUsuario.agregarUsuario(usuario);

@@ -6,7 +6,11 @@ import model.IActualizable;
 import model.Mesero;
 import model.Usuario;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 
 public class ControllerUsuario {
@@ -129,9 +133,35 @@ public class ControllerUsuario {
     }
 
     /** Devuelve el usuario si las credenciales son correctas, o null si no. */
+    /**
+     * SHA-256 en hexadecimal. Sin salt: es un prototipo academico y asi se
+     * declara. Lo que se evita es lo indefendible, que es guardar la
+     * contrasena en claro en un campo llamado passwordHash.
+     *
+     * Vive aqui y no en Usuario porque cifrar es una regla de la aplicacion,
+     * no una responsabilidad de la entidad: el modelo guarda el hash, el
+     * controlador decide como se calcula.
+     */
+    public static String hash(String texto) {
+        String entrada = (texto == null) ? "" : texto;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] resumen = md.digest(entrada.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(resumen);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 no disponible en esta JVM", e);
+        }
+    }
+
+    /**
+     * El controlador cifra la clave recibida y deja que la entidad compare.
+     * Mismo mensaje para correo inexistente, clave incorrecta y usuario
+     * inactivo: distinguirlos revelaria que correos estan registrados.
+     */
     public static Usuario autenticar(String correo, String clave) {
+        String hashRecibido = hash(clave);
         for (Usuario usuario : usuarios) {
-            if (usuario.getCorreo().equalsIgnoreCase(correo) && usuario.iniciarSesion(clave)) {
+            if (usuario.getCorreo().equalsIgnoreCase(correo) && usuario.iniciarSesion(hashRecibido)) {
                 return usuario;
             }
         }
