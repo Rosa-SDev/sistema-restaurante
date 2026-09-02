@@ -6,13 +6,30 @@ import model.IActualizable;
 import model.Mesero;
 import model.Usuario;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 
 public class ControllerUsuario {
 
     private static List<Usuario> usuarios = new ArrayList<>();
     private static List<IActualizable> observadores = new ArrayList<>();
+
+    /** Hash del texto vacio: es el que sale si alguien no escribio contrasena. */
+    private static final String HASH_VACIO = hash("");
+
+    /**
+     * Un hash SHA-256 son 64 caracteres hexadecimales. Si lo que llega no tiene
+     * esa forma, alguien paso la contrasena en claro al constructor: sin esta
+     * comprobacion se guardaria tal cual, el usuario nunca podria entrar y no
+     * habria ningun error que lo delatara.
+     */
+    private static boolean hashValido(String passwordHash) {
+        return passwordHash != null && passwordHash.matches("[0-9a-f]{64}");
+    }
 
     public static void agregarUsuario(Usuario usuario) throws RuntimeException {
         if (usuario == null) {
@@ -32,6 +49,14 @@ public class ControllerUsuario {
         }
         if (existeCorreo(usuario.getCorreo())) {
             throw new RuntimeException("Error: ya existe un usuario con ese correo.");
+        }
+        if (!hashValido(usuario.getPasswordHash())) {
+            throw new RuntimeException("Error: la contrasena debe cifrarse con ControllerUsuario.hash().");
+        }
+        // El controlador solo ve el hash, no puede medir la longitud de la clave.
+        // Lo que si reconoce es el hash del texto vacio: eso es no haber puesto ninguna.
+        if (HASH_VACIO.equals(usuario.getPasswordHash())) {
+            throw new RuntimeException("Error: el usuario necesita una contrasena.");
         }
         usuarios.add(usuario);
         actualizar();
@@ -102,6 +127,12 @@ public class ControllerUsuario {
         if (existeCorreoEnOtro(usuarioActualizado.getCorreo(), usuarioActualizado.getId())) {
             throw new RuntimeException("Error: ya existe otro usuario con ese correo.");
         }
+        if (!hashValido(usuarioActualizado.getPasswordHash())) {
+            throw new RuntimeException("Error: la contrasena debe cifrarse con ControllerUsuario.hash().");
+        }
+        if (HASH_VACIO.equals(usuarioActualizado.getPasswordHash())) {
+            throw new RuntimeException("Error: el usuario necesita una contrasena.");
+        }
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getId() == usuarioActualizado.getId()) {
                 usuarios.set(i, usuarioActualizado);
@@ -129,9 +160,35 @@ public class ControllerUsuario {
     }
 
     /** Devuelve el usuario si las credenciales son correctas, o null si no. */
+    /**
+     * SHA-256 en hexadecimal. Sin salt: es un prototipo academico y asi se
+     * declara. Lo que se evita es lo indefendible, que es guardar la
+     * contrasena en claro en un campo llamado passwordHash.
+     *
+     * Vive aqui y no en Usuario porque cifrar es una regla de la aplicacion,
+     * no una responsabilidad de la entidad: el modelo guarda el hash, el
+     * controlador decide como se calcula.
+     */
+    public static String hash(String texto) {
+        String entrada = (texto == null) ? "" : texto;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] resumen = md.digest(entrada.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(resumen);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 no disponible en esta JVM", e);
+        }
+    }
+
+    /**
+     * El controlador cifra la clave recibida y deja que la entidad compare.
+     * Mismo mensaje para correo inexistente, clave incorrecta y usuario
+     * inactivo: distinguirlos revelaria que correos estan registrados.
+     */
     public static Usuario autenticar(String correo, String clave) {
+        String hashRecibido = hash(clave);
         for (Usuario usuario : usuarios) {
-            if (usuario.getCorreo().equalsIgnoreCase(correo) && usuario.iniciarSesion(clave)) {
+            if (usuario.getCorreo().equalsIgnoreCase(correo) && usuario.iniciarSesion(hashRecibido)) {
                 return usuario;
             }
         }

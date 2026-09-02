@@ -55,13 +55,13 @@ public class Main {
     /** Un usuario por rol, para poder probar el filtrado de menus de cada uno. */
     private static void cargarUsuarios() {
         ControllerUsuario.agregarUsuario(
-                new Administrador(1, "Laura Medina", "admin@restaurante.com", "admin123"));
+                new Administrador(1, "Laura Medina", "admin@restaurante.com", ControllerUsuario.hash("admin123")));
         ControllerUsuario.agregarUsuario(
-                new Mesero(2, "Ana Torres", "mesero@restaurante.com", "mesero123"));
+                new Mesero(2, "Ana Torres", "mesero@restaurante.com", ControllerUsuario.hash("mesero123")));
         ControllerUsuario.agregarUsuario(
-                new Cocinero(3, "Beto Ruiz", "cocinero@restaurante.com", "cocinero123"));
+                new Cocinero(3, "Beto Ruiz", "cocinero@restaurante.com", ControllerUsuario.hash("cocinero123")));
         ControllerUsuario.agregarUsuario(
-                new Cajero(4, "Luis Paz", "cajero@restaurante.com", "cajero123"));
+                new Cajero(4, "Luis Paz", "cajero@restaurante.com", ControllerUsuario.hash("cajero123")));
     }
 
     private static void cargarClientes() {

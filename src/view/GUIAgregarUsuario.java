@@ -54,6 +54,13 @@ public class GUIAgregarUsuario extends JFrame {
             String correo = correoTexto.getText().trim();
             String password = new String(passwordTexto.getPassword()).trim();
 
+            // Aqui es donde existe la clave en texto plano, asi que es el unico
+            // sitio que puede comprobar su longitud. Al actualizar, vacia significa
+            // "no la cambies", asi que solo se exige al crear.
+            if (!esActualizar && password.isEmpty()) {
+                throw new RuntimeException("Error: la contrasena es obligatoria.");
+            }
+
             if (esActualizar) {
                 Usuario existente = ControllerUsuario.buscarUsuario(id);
                 if (existente == null) {
@@ -64,7 +71,7 @@ public class GUIAgregarUsuario extends JFrame {
                 existente.setCorreo(correo);
 
                 if (!password.isEmpty()) {
-                    existente.cambiarPassword(password);
+                    existente.cambiarPassword(ControllerUsuario.hash(password));
                 }
 
                 ControllerUsuario.actualizarUsuario(existente);
@@ -73,10 +80,10 @@ public class GUIAgregarUsuario extends JFrame {
             } else {
 
                 Usuario usuario = switch (rolCombo.getSelectedIndex()) {
-                    case 0 -> new Administrador(id, nombre, correo, password);
-                    case 1 -> new Mesero(id, nombre, correo, password);
-                    case 2 -> new Cocinero(id, nombre, correo, password);
-                    default -> new Cajero(id, nombre, correo, password);
+                    case 0 -> new Administrador(id, nombre, correo, ControllerUsuario.hash(password));
+                    case 1 -> new Mesero(id, nombre, correo, ControllerUsuario.hash(password));
+                    case 2 -> new Cocinero(id, nombre, correo, ControllerUsuario.hash(password));
+                    default -> new Cajero(id, nombre, correo, ControllerUsuario.hash(password));
                 };
 
                 ControllerUsuario.agregarUsuario(usuario);

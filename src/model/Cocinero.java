@@ -2,8 +2,8 @@ package model;
 
 public class Cocinero extends Usuario {
 
-    public Cocinero(int id, String nombre, String correo, String password) {
-        super(id, nombre, correo, password);
+    public Cocinero(int id, String nombre, String correo, String passwordHash) {
+        super(id, nombre, correo, passwordHash);
     }
 
     // Asigna este cocinero al pedido y lo pone en preparación
