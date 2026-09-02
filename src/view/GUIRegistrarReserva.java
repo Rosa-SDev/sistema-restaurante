@@ -12,8 +12,6 @@ import model.Reserva;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 public class GUIRegistrarReserva extends JFrame {
 
@@ -21,7 +19,7 @@ public class GUIRegistrarReserva extends JFrame {
     private JComboBox<Cliente> clienteCombo;
     private JComboBox<Mesa> mesaCombo;
     private JComboBox<Mesero> meseroCombo;
-    private JSpinner fechaHoraSpinner;
+    private SelectorFecha fechaHoraSelector;
 
     public GUIRegistrarReserva() {
         ComponentesGUI.configurar(this, "Registrar reserva", 500, 380);
@@ -54,16 +52,15 @@ public class GUIRegistrarReserva extends JFrame {
         // "ahora" por defecto el propio instante de abrir la ventana ya seria
         // pasado al pulsar Registrar. El modelo se deja sin minimo a proposito,
         // para poder bajar a una fecha pasada y provocar el rechazo.
-        fechaHoraSpinner = new JSpinner(new SpinnerDateModel());
-        fechaHoraSpinner.setValue(Date.from(LocalDateTime.now().plusHours(1)
-                .atZone(ZoneId.systemDefault()).toInstant()));
-        fechaHoraSpinner.setEditor(new JSpinner.DateEditor(fechaHoraSpinner, "dd/MM/yyyy HH:mm"));
-        fechaHoraSpinner.setBorder(EstilosGUI.GRAY_BORDER);
+        // La fecha solo entra por el calendario: al no poder teclearse, no hay
+        // forma de escribir un texto que no sea una fecha valida.
+        fechaHoraSelector = new SelectorFecha();
+        fechaHoraSelector.setFechaHora(LocalDateTime.now().plusHours(1));
 
         JPanel formulario = ComponentesGUI.formulario(
                 new String[]{"ID:", "Cliente:", "Mesa:", "Mesero:", "Fecha y hora:", "Núm. personas:"},
                 new JComponent[]{idTexto, clienteCombo, mesaCombo, meseroCombo,
-                        fechaHoraSpinner, numPersonasTexto});
+                        fechaHoraSelector, numPersonasTexto});
 
         JButton registrarBTN = new JButton("Registrar");
         registrarBTN.addActionListener(e -> registrar());
@@ -92,8 +89,7 @@ public class GUIRegistrarReserva extends JFrame {
             int id = enteroEnRango(idTexto, "el ID", 1, 999999);
             int numPersonas = enteroEnRango(numPersonasTexto, "el número de personas", 1, 99);
 
-            Date fecha = (Date) fechaHoraSpinner.getValue();
-            LocalDateTime fechaHora = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime fechaHora = fechaHoraSelector.getFechaHora();
 
             Reserva reserva = new Reserva(
                     id,
