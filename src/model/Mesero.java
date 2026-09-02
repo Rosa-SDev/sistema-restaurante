@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class Mesero extends Usuario {
 
-    public Mesero(int id, String nombre, String correo, String password) {
-        super(id, nombre, correo, password);
+    public Mesero(int id, String nombre, String correo, String passwordHash) {
+        super(id, nombre, correo, passwordHash);
     }
 
     // Se delega al controlador

@@ -2,8 +2,8 @@ package model;
 
 public class Cajero extends Usuario {
 
-    public Cajero(int id, String nombre, String correo, String password) {
-        super(id, nombre, correo, password);
+    public Cajero(int id, String nombre, String correo, String passwordHash) {
+        super(id, nombre, correo, passwordHash);
     }
 
     // Se delega al controlador, que calcula el total con impuestos
