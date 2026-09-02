@@ -54,6 +54,13 @@ public class GUIAgregarUsuario extends JFrame {
             String correo = correoTexto.getText().trim();
             String password = new String(passwordTexto.getPassword()).trim();
 
+            // Aqui es donde existe la clave en texto plano, asi que es el unico
+            // sitio que puede comprobar su longitud. Al actualizar, vacia significa
+            // "no la cambies", asi que solo se exige al crear.
+            if (!esActualizar && password.isEmpty()) {
+                throw new RuntimeException("Error: la contrasena es obligatoria.");
+            }
+
             if (esActualizar) {
                 Usuario existente = ControllerUsuario.buscarUsuario(id);
                 if (existente == null) {

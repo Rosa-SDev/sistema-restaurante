@@ -18,6 +18,9 @@ public class ControllerUsuario {
     private static List<Usuario> usuarios = new ArrayList<>();
     private static List<IActualizable> observadores = new ArrayList<>();
 
+    /** Hash del texto vacio: es el que sale si alguien no escribio contrasena. */
+    private static final String HASH_VACIO = hash("");
+
     /**
      * Un hash SHA-256 son 64 caracteres hexadecimales. Si lo que llega no tiene
      * esa forma, alguien paso la contrasena en claro al constructor: sin esta
@@ -49,6 +52,11 @@ public class ControllerUsuario {
         }
         if (!hashValido(usuario.getPasswordHash())) {
             throw new RuntimeException("Error: la contrasena debe cifrarse con ControllerUsuario.hash().");
+        }
+        // El controlador solo ve el hash, no puede medir la longitud de la clave.
+        // Lo que si reconoce es el hash del texto vacio: eso es no haber puesto ninguna.
+        if (HASH_VACIO.equals(usuario.getPasswordHash())) {
+            throw new RuntimeException("Error: el usuario necesita una contrasena.");
         }
         usuarios.add(usuario);
         actualizar();
@@ -121,6 +129,9 @@ public class ControllerUsuario {
         }
         if (!hashValido(usuarioActualizado.getPasswordHash())) {
             throw new RuntimeException("Error: la contrasena debe cifrarse con ControllerUsuario.hash().");
+        }
+        if (HASH_VACIO.equals(usuarioActualizado.getPasswordHash())) {
+            throw new RuntimeException("Error: el usuario necesita una contrasena.");
         }
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getId() == usuarioActualizado.getId()) {
