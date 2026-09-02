@@ -18,6 +18,16 @@ public class ControllerUsuario {
     private static List<Usuario> usuarios = new ArrayList<>();
     private static List<IActualizable> observadores = new ArrayList<>();
 
+    /**
+     * Un hash SHA-256 son 64 caracteres hexadecimales. Si lo que llega no tiene
+     * esa forma, alguien paso la contrasena en claro al constructor: sin esta
+     * comprobacion se guardaria tal cual, el usuario nunca podria entrar y no
+     * habria ningun error que lo delatara.
+     */
+    private static boolean hashValido(String passwordHash) {
+        return passwordHash != null && passwordHash.matches("[0-9a-f]{64}");
+    }
+
     public static void agregarUsuario(Usuario usuario) throws RuntimeException {
         if (usuario == null) {
             throw new RuntimeException("Error: usuario nulo.");
@@ -36,6 +46,9 @@ public class ControllerUsuario {
         }
         if (existeCorreo(usuario.getCorreo())) {
             throw new RuntimeException("Error: ya existe un usuario con ese correo.");
+        }
+        if (!hashValido(usuario.getPasswordHash())) {
+            throw new RuntimeException("Error: la contrasena debe cifrarse con ControllerUsuario.hash().");
         }
         usuarios.add(usuario);
         actualizar();
@@ -105,6 +118,9 @@ public class ControllerUsuario {
         }
         if (existeCorreoEnOtro(usuarioActualizado.getCorreo(), usuarioActualizado.getId())) {
             throw new RuntimeException("Error: ya existe otro usuario con ese correo.");
+        }
+        if (!hashValido(usuarioActualizado.getPasswordHash())) {
+            throw new RuntimeException("Error: la contrasena debe cifrarse con ControllerUsuario.hash().");
         }
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getId() == usuarioActualizado.getId()) {
